@@ -1,0 +1,16 @@
+{
+	"name": "express-nodejs",
+	"version": "1.0.0",
+	"description": "",
+	"main": "server.js",
+	"keywords": [],
+	"author": [],
+	"license": "ISC",
+	"dependencies": {
+		"express": "^4.17.1",
+		"nodemon": "^2.0.4"
+	},
+	"scripts": {
+		"start": "(cd react-app/ && yarn run build) && nodemon server.js"
+	}
+}
