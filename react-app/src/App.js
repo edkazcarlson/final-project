@@ -4,7 +4,6 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Home from './Home'
 import CreateStory from './CreateStory'
 import CompletedStoryList from './CompletedStoryList'
-import CompletedStoryIndividualPage from './CompletedStoryIndividualPage';
 import CurrentStory from './CurrentStory'
 
 export default class App extends React.Component {

@@ -1,6 +1,14 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-
+/*
+TODO:
+-add more stuff to each story
+-make voting work (will require users to be logged in)
+-might want to have IndividualPage be passed in as component in MAP to keep things less messy!
+Feature ideas:
+-way to sort (i.e., newest default, other options like most voted, alphabetical by title, longest, etc)
+-could make it span multiple pages instead of just one giant page
+*/
 export default class CompletedStoryList extends Component {
 
     constructor(props) {
@@ -35,8 +43,3 @@ export default class CompletedStoryList extends Component {
         )
     }
 }
-/*{demoStories.map((story) =>{
-                return (<div>
-                    <b>{story.vote}: </b><a href = '/completeStory'>{story.title}</a>
-                </div>)
-            })}*/

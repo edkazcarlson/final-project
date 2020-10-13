@@ -1,4 +1,3 @@
-//this will be my server file!
 const path = require("path");
 const express = require("express");
 const app = express(); // create express app
@@ -16,6 +15,11 @@ app.use(express.static(path.join(__dirname, "react-app", "build")));
 app.use(express.static("public"));
 
 /*
+TODO:
+-add backend based on stuff needed from frontends' TODO lists!
+*/
+
+/*
 a story object has the following properties:
 -id (based on db, makes easy to update)
 -story name title. IDEA: we can have this be added after the story. and have a generated one at beginning (story x)
@@ -31,20 +35,18 @@ app.post('/addstory', bodyParser.json(), (req, res) => {
     });
   });
 })
-
+//grabs the current story
 app.get('/getcurstory', (req, res) => {
   stories.findOne({finishedStory: false}, (err, result)=> {
     if(result==null) res.send({status:"nostory"});
     else res.send(result);
   })
 })
-
+//adds word to story
 app.post('/addword', bodyParser.json(), (req, res)=> {
-  //EDIT by the id 
   stories.updateOne({_id:mongodb.ObjectID(req.body.id)}, {$push: {listofwords: req.body.word}})
   .then(()=>{
     stories.findOne({_id:mongodb.ObjectID(req.body.id)}, (err, result)=>{
-      console.log(result.listofwords);
       const isFilled = result.listofwords.length >= result.maxwords;
       if(isFilled) {
         stories.updateOne({_id:mongodb.ObjectID(req.body.id)}, {$set: {finishedStory: true}})
@@ -56,12 +58,11 @@ app.post('/addword', bodyParser.json(), (req, res)=> {
     })
   })
 })
-
+//called when the user enters the finished stories page
 app.get('/getfinishedstories', (req, res)=> {
-  //TODO: make this! this will grab all COMPLETED stories to show off.
   stories.find({"finishedStory": true}).toArray((err,results)=>{
-    res.send(results)
-  })
+    res.send(results);
+  });
 })
 
 //testing purposes
