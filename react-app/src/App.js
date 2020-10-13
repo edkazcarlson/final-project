@@ -3,8 +3,11 @@ import './App.css';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Home from './Home'
 import CreateStory from './CreateStory'
+import TopBar from './TopBar'
 import CompletedStoryList from './CompletedStoryList'
-import CurrentStory from './CurrentStory'
+import CompletedStoryIndividualPage from './CompletedStoryIndividualPage';
+import InProgressStory from './InProgressStory';
+import Login from './Login'
 
 export default class App extends React.Component {
   constructor(props){
@@ -20,32 +23,34 @@ export default class App extends React.Component {
   render() {
     return(
     <Router>
+        <TopBar/>
         <Route exact path='/'>
           <Home setCurrentInProgressStory = {this.setCurrentInProgressStory}/>
+        </Route>
+        <Route exact path = "/login">
+          <Login
+          isLogin = {true}/>
+        </Route>
+        <Route path = "/register">
+          <Login
+          isLogin = {false}/>
         </Route>
         <Route path='/createstory'>
           <CreateStory/>
         </Route>
-        <Route path='/contribute'>
-          <CurrentStory/>
+        <Route path='/inProgressStory'>
+          <InProgressStory/>
         </Route>
-        <Route path='/completedworks'>
-          <CompletedStoryList/>
+        <Route path='/completedStories'>
+          <CompletedStoryList
+          setCurrentStory = {this.setCurrentStory}/>
+        </Route>
+        <Route path='/completeStory'>
+          <CompletedStoryIndividualPage
+          id = {this.state.currentStoryID}/>
         </Route>
 
     </Router>
     );
   }
 }
-//pages (routes) we need, going off of Char's model:
-/*
--home page
--create story page /createstory
--contribute page /contribute
---page that says you cannot contribute at the moment (still same link, diff component)
--view past stories /completedworks
---we can have a component for each individual story!
-
--idk how login/signup will work????
-
-*/
