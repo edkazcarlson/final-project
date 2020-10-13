@@ -1,5 +1,12 @@
 import React from 'react';
 import axios from "axios"
+import * as Y from 'yjs'
+import { WebrtcProvider } from 'y-webrtc'
+import { WebsocketProvider } from 'y-websocket'
+import { IndexeddbPersistence } from 'y-indexeddb'
+
+const ydoc = new Y.Doc()
+
 export default class CreateStory extends React.Component {
   /*
     can add more inputs in future, for now just threw in a couple for testing purposes!
@@ -16,6 +23,21 @@ export default class CreateStory extends React.Component {
     axios.post('/addstory', {storyname: inputs[0].value, storylength: inputs[1].value, storyfirstword: inputs[2].value})
     .then(response=> {
         console.log("This is the response: ", response.data);
+        // this allows you to instantly get the (cached) documents data
+        const indexeddbProvider = new IndexeddbPersistence(response.data._id, ydoc)
+        indexeddbProvider.whenSynced.then(() => {
+        console.log('loaded data from indexed db')
+        })
+
+        // Sync clients with the y-webrtc provider.
+        const webrtcProvider = new WebrtcProvider(response.data._id, ydoc)
+
+        // Sync clients with the y-websocket provider
+        const websocketProvider = new WebsocketProvider(
+        'wss://demos.yjs.dev', response.data._id, ydoc
+        )
+        const yarray = ydoc.getArray(response.data._id);
+        yarray.insert(0, [response.data.listofwords[0]]);
         alert("Story created successfully!");
     })
  }

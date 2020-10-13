@@ -57,6 +57,10 @@ app.post('/addword', bodyParser.json(), (req, res)=> {
   })
 })
 
+app.get('/getstories', (req, res)=> {
+  //TODO: make this! this will grab all COMPLETED stories to show off.
+})
+
 //testing purposes
 app.get('/del', (req, res) => {
   stories.remove({})
