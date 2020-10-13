@@ -57,8 +57,11 @@ app.post('/addword', bodyParser.json(), (req, res)=> {
   })
 })
 
-app.get('/getstories', (req, res)=> {
+app.get('/getfinishedstories', (req, res)=> {
   //TODO: make this! this will grab all COMPLETED stories to show off.
+  stories.find({"finishedStory": true}).toArray((err,results)=>{
+    res.send(results)
+  })
 })
 
 //testing purposes

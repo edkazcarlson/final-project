@@ -1,19 +1,42 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import axios from 'axios';
 
-export default function CompletedStoryList(props) {
-    let demoStories = [{vote: 1, title: 'demoTitle1', id: 1}, {vote: 2, title: 'demoTitle2', id: 2}];
+export default class CompletedStoryList extends Component {
 
-    function onClick(id){
-        props.setCurrentStory(id);
-        window.open('/completeStory', "_self");
+    constructor(props) {
+        super(props);
+        this.state = {
+            listOfStories: [],
+        }
     }
-    return (
+    componentDidMount(){
+        axios.get('/getfinishedstories')
+        .then(res=>{
+            this.setState({
+                listOfStories: res.data
+            })
+        })
+    }
+    onClick(id){
+        
+    }
+    render() {
+        return (
         <div>
-            {demoStories.map((story) =>{
+            {this.state.listOfStories.map((story)=>(
+                <div>
+                    <h2>{story.title}</h2>
+                    <p>{story.listofwords.join(' ')}</p>
+                    <a href="">VOTE!!!!!!</a>
+                    <p>other info........</p>
+                </div>
+            ))}
+        </div>
+        )
+    }
+}
+/*{demoStories.map((story) =>{
                 return (<div>
                     <b>{story.vote}: </b><a href = '/completeStory'>{story.title}</a>
                 </div>)
-            })}
-        </div>
-    )
-}
+            })}*/
