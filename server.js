@@ -5,6 +5,7 @@ const slash   = require('express-slash');
 const app = express(); // create express app
 const cookieSession = require('cookie-session');
 const GitHubStrategy = require('passport-github2').Strategy;
+require('dotenv').config();
 
 
 app.enable('strict routing');
@@ -14,8 +15,8 @@ const bodyParser = require('body-parser');
 
 const passport = require('passport');
 passport.use(new GitHubStrategy({
-  clientID: '05e88a898cffa2752268',
-  clientSecret: 'f28b2887433621b9f768f527b323512fc3ea1891',
+  clientID: process.env.GITHUB_CLIENT_ID,
+  clientSecret: process.env.GITHUB_CLIENT_SECRET,
   callbackURL: "http://127.0.0.1:3000/auth/github/callback"
 },
 function(accessToken, refreshToken, profile, done) {
