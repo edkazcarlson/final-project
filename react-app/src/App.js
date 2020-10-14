@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { HashRouter as Router, Route, Switch } from 'react-router-dom';
 import Home from './Home'
 import CreateStory from './CreateStory'
 import TopBar from './TopBar'
@@ -14,10 +14,10 @@ export default class App extends React.Component {
     super(props)
     this.state = {currentStoryID: -1, inProgressStoryID : -1}
   }
-  setCurrentStory(id){
+  setCurrentStory = (id) => {
     this.setState({currentStoryID: id})
   }
-  setCurrentInProgressStory(id){
+  setCurrentInProgressStory= (id) =>{
     this.setState({inProgressStoryID: id})
   }
   render() {
@@ -43,7 +43,8 @@ export default class App extends React.Component {
         </Route>
         <Route path='/completedStories'>
           <CompletedStoryList
-          setCurrentStory = {this.setCurrentStory}/>
+          setCurrentStory = {this.setCurrentStory}
+          id = {this.state.currentStoryID}/>
         </Route>
         <Route path='/completeStory'>
           <CompletedStoryIndividualPage

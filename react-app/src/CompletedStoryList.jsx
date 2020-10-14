@@ -15,7 +15,7 @@ export default class CompletedStoryList extends React.Component {
         fetch("/getallcompleted").then(function(response) {
             return response.json()
         })
-        .then( function( json ) {
+        .then( ( json ) => {
             console.log(this);
             console.log(json.stories);
             that.setState({
@@ -24,16 +24,18 @@ export default class CompletedStoryList extends React.Component {
         })
     }
 
-    // function onClick(id){
-    //     props.setCurrentStory(id);
-    //     window.open('/completeStory', "_self");
-    // }
+    onClick(id){
+        this.props.setCurrentStory(id);
+        window.open('/#/completeStory', "_self");
+    }
 
     render() {
         return(<div>
+            {this.props.id}
                {this.state.demoStories.map((story) =>{
                    return (<div>
-                       <b>{this.getVotes(story.votes)}: </b><a href = '/completeStory'>{story.title}</a>
+                       <p href = '/completeStory' onClick = {() => {this.onClick(story.id)}}><b>{this.getVotes(story.votes)}: </b>
+                       {story.title}</p>
                    </div>)
                })}
             </div>)

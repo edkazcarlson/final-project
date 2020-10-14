@@ -2,7 +2,7 @@ import axios from 'axios';
 import React from 'react';
 
 export default function TopBar(props){
-  let links = [{name: 'Home Page', url: '/'},{name: 'Browse Completed Stories', url: '/completedStories'},{name: 'Make a Story', url: '/CreateStory'}];
+  let links = [{name: 'Home Page', url: '/'},{name: 'Browse Completed Stories', url: '/#/completedStories'},{name: 'Make a Story', url: '/#/CreateStory'}];
   
   function logOut(){
     fetch('/logOut', {
