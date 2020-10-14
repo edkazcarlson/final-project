@@ -30,7 +30,7 @@ MORE TO COME :))))))
 */
 app.post('/addstory', bodyParser.json(), (req, res) => {
   stories.countDocuments({}, (err, result)=> {
-    stories.insertOne({title: req.body.storyname, listofwords:[req.body.storyfirstword], maxwords: req.body.storylength, finishedStory: false, votes: [], contributors: [req.body.author], timeStart: Date.now(), timeEnd: null, storyType: req.body.storyType, skip: req.body.skip}).then(r=> {
+    stories.insertOne({title: `Story ${result}`, listofwords:[req.body.storyfirstword], maxwords: req.body.storylength, finishedStory: false, votes: [], contributors: [req.body.author], timeStart: Date.now(), timeEnd: null, storyType: req.body.storyType, skip: req.body.skip}).then(r=> {
       res.send(r.ops[0]);
     });
   });

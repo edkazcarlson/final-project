@@ -17,7 +17,7 @@ decide how to handle the title
  createStory(e) {
     e.preventDefault();
     const inputs = document.querySelectorAll('.storyInput');
-    axios.post('/addstory', {author: "inser user ID", storyname: inputs[0].value, storylength: inputs[1].value, storyfirstword: inputs[2].value,  skip: inputs[3].value, storyType: document.querySelector('input[name="storyType"]:checked').value})
+    axios.post('/addstory', {author: "inser user ID", storylength: inputs[0].value, storyfirstword: inputs[1].value,  skip: inputs[2].value, storyType: document.querySelector('input[name="storyType"]:checked').value})
     .then(response=> {
         // this allows you to instantly get the (cached) documents data
         const indexeddbProvider = new IndexeddbPersistence(response.data._id, ydoc)
@@ -43,7 +43,6 @@ decide how to handle the title
         <h1>Create Story</h1>
         <br/>
         <form>
-            <label for="storyname">Story name </label><input id="storyname" name="storyname" className="storyInput"/><br/>
             <label for="storylength">Story length </label><input id="storylength" name="storylength" className="storyInput"/><br/>
             <label for="storyfirstword">Story first word </label><input id="storyfirstword" name="storyfirstword" className="storyInput"/><br/>
             <label htmlFor="skip">Number of Contributions before Recontributing (should probably have a longer explanation for this bit) </label><input id="skip" type="number" name="skip" className="storyInput"/><br/>
