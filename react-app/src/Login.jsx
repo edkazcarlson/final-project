@@ -61,7 +61,7 @@ function register(e){
         return  response.json()
     })
     .then( function( json ) {
-        if (json.code == 'found'){
+        if (json.code === 'found'){
             alert('This username already exists')
         } else {
             window.open('/', "_self")

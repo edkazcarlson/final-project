@@ -88,7 +88,7 @@ app.get('/auth/github/callback',
       if (err){
         throw err;
       } 
-      if (result.length == 1){
+      if (result.length === 1){
         console.log('found and logging in ')
         console.log(username)
         console.log(pass)
@@ -117,6 +117,12 @@ app.get('/getcurstory', (req, res) => {
   })
 })
 
+app.get('/getallcompleted', (req, res) => {
+  stories.find({finishedStory: true}).toArray(function(err, result){
+    res.json({stories: result});
+  });
+})
+
 app.get('/', (request, response) =>{
   console.log('/')
   let username = request.session['User'];
@@ -139,7 +145,7 @@ app.post('/login', (request, response) => {
     if (err){
       throw err;
     } 
-    if (result.length == 1){
+    if (result.length === 1){
       console.log('found and logging in ')
       console.log(username)
       console.log(pass)
@@ -151,7 +157,7 @@ app.post('/login', (request, response) => {
         if (err){
           throw err;
         }
-        if (result.length == 1){ //found a username
+        if (result.length === 1){ //found a username
           response.json({error: 'password'})
         } else {//couldnt find username
           response.json({error: 'username'})
@@ -169,7 +175,7 @@ app.post('/register', (request, response) => {
     if (err){
       throw err;
     }
-    if (result.length == 1){
+    if (result.length === 1){
       response.json({code: 'found'})
     } else {
       users.insertOne({'username': username, 'password': pass})
@@ -189,8 +195,8 @@ app.post('/logOut', (request, response) => {
 app.get("/login", (request, response) => {
   response.sendFile(__dirname + "/react-app/build/index.html");
 });
-app.get('/currentUser', (request, respone) => {
-  respone.json({user: request.session['User']})
+app.get('/currentUser', (request, response) => {
+  response.json({user: request.session['User']})
 });
 app.get("/register", (request, response) => {
   response.sendFile(__dirname + "/react-app/build/index.html");

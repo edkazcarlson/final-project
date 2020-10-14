@@ -49,7 +49,7 @@ export default class Home extends React.Component {
         <br/>
         <h2>Current Story</h2>
         <br/>
-        {this.getStories().length == 0 ? 
+        {this.getStories().length === 0 ?
          <CreateStory/>: this.getStories().map((story) =>{
           return(<div onClick = {() => {this.jumpToStory(story.id)}}>
             <b>{story.title}</b> written by {story.op}
