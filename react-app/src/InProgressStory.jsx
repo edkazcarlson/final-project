@@ -4,7 +4,7 @@ export class InProgressStory extends Component {
     render() {
         return (
             <div>
-                
+
             </div>
         )
     }

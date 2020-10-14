@@ -102,8 +102,11 @@ app.get('/auth/github/callback',
 });
 
 app.post('/addstory', bodyParser.json(), (req, res) => {
-  
-  console.log(req.body);
+  stories.countDocuments({}, (err, result)=> {
+    stories.insertOne({title: `Story ${result}`, listofwords:[req.body.storyfirstword], maxwords: req.body.storylength, finishedStory: false, votes: [], contributors: [req.body.author], timeStart: Date.now(), timeEnd: null, storyType: req.body.storyType, skip: req.body.skip}).then(r=> {
+      res.send(r.ops[0]);
+    });
+  });
 })
 
 app.get('/getcurstory', (req, res) => {
@@ -191,6 +194,17 @@ app.get('/currentUser', (request, respone) => {
 app.get("/register", (request, response) => {
   response.sendFile(__dirname + "/react-app/build/index.html");
 });
+app.get("/completedStories", (request, response) => {
+  response.sendFile(__dirname + "/react-app/build/index.html");
+});
+app.get("/CreateStory", (request, response) => {
+  response.sendFile(__dirname + "/react-app/build/index.html");
+});
+
+app.get("/completeStory", (request, response) => {
+  response.sendFile(__dirname + "/react-app/build/index.html");
+});
+
 
 // gets everything else
 // app.get('*', (req, res)=>{
