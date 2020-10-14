@@ -1,33 +1,106 @@
+//this will be my server file!
 const path = require("path");
 const express = require("express");
+const slash   = require('express-slash');
 const app = express(); // create express app
+const cookieSession = require('cookie-session');
+const GitHubStrategy = require('passport-github2').Strategy;
+
+
+app.enable('strict routing');
+app.use(slash());
+
 const bodyParser = require('body-parser');
-const mongodb = require('mongodb');
-const MongoClient = mongodb.MongoClient;
+
+const passport = require('passport');
+passport.use(new GitHubStrategy({
+  clientID: '05e88a898cffa2752268',
+  clientSecret: 'f28b2887433621b9f768f527b323512fc3ea1891',
+  callbackURL: "http://127.0.0.1:3000/auth/github/callback"
+},
+function(accessToken, refreshToken, profile, done) {
+  // asynchronous verification, for effect...
+  process.nextTick(function () {
+    
+    // To keep the example simple, the user's GitHub profile is returned to
+    // represent the logged-in user.  In a typical application, you would want
+    // to associate the GitHub account with a user record in your database,
+    // and return that user instead.
+    return done(null, profile);
+  });
+}
+));
+app.use(passport.initialize());
+app.use(passport.session());
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function(obj, done) {
+  done(null, obj);
+});
+
+
+
+app.use(cookieSession({
+  name: 'session',
+  keys: ['key1', 'key2']
+})) 
+const MongoClient = require('mongodb').MongoClient;
 const uri = "mongodb+srv://user:aNy7D3J1XbTT2@cluster0.ajcp4.mongodb.net/<dbname>?retryWrites=true&w=majority";
-const client = new MongoClient(uri, { useNewUrlParser: true });
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 let stories = null;
 client.connect(err => {
   stories = client.db("data").collection("teststories");
+  stories.find({ }).toArray().then((res) => {console.log(res)})
 });
+let users = null;
+client.connect(err => {
+  users = client.db("data").collection("users");
+  users.find({ }).toArray().then((res) => {console.log(res)})
+})
+
+
 // add middlewares
-app.use(express.static(path.join(__dirname, "react-app", "build")));
-app.use(express.static("public"));
+// app.use(express.static(path.join(__dirname, "react-app", "build")));
+// app.use(express.static("public"));
 
-/*
-TODO:
--add backend based on stuff needed from frontends' TODO lists!
-*/
 
-/*
-a story object has the following properties:
--id (based on db, makes easy to update)
--story name title. IDEA: we can have this be added after the story. and have a generated one at beginning (story x)
--list of words listofwords
--maximum number of words maxwords
+app.use(bodyParser.json())
+function setSessionUser(req, username, password){
+  req.session['User'] = username;
+  req.session['Pass'] = password;
+}
 
-MORE TO COME :))))))
-*/
+app.get('/auth/github',
+  passport.authenticate('github', { scope: [ 'user:email' ] }),
+  function(req, res){
+});
+
+app.get('/auth/github/callback', 
+  passport.authenticate('github', { failureRedirect: '/login' }),
+  function(req, res) {
+    let username = req.user.username;
+    let pass = req.user.id;
+    let checkQuery = {'username': username, 'password': pass}
+    users.find(checkQuery).toArray(function(err, result){
+      if (err){
+        throw err;
+      } 
+      if (result.length == 1){
+        console.log('found and logging in ')
+        console.log(username)
+        console.log(pass)
+        setSessionUser(req, username, pass);
+        res.redirect('/');
+      } else { //username password combo not found
+        console.log('make a new user')
+        users.insertOne({'username': username, 'password': pass}).then(setSessionUser(req, username, pass))
+        res.redirect('/');
+      }
+    })
+});
+
 app.post('/addstory', bodyParser.json(), (req, res) => {
   stories.countDocuments({}, (err, result)=> {
     stories.insertOne({title: `Story ${result}`, listofwords:[req.body.storyfirstword], maxwords: req.body.storylength, finishedStory: false, votes: [], contributors: [req.body.author], timeStart: Date.now(), timeEnd: null, storyType: req.body.storyType, skip: req.body.skip}).then(r=> {
@@ -35,45 +108,110 @@ app.post('/addstory', bodyParser.json(), (req, res) => {
     });
   });
 })
-//grabs the current story
+
 app.get('/getcurstory', (req, res) => {
   stories.findOne({finishedStory: false}, (err, result)=> {
-    if(result==null) res.send({status:"nostory"});
-    else res.send(result);
+    if(result==null) console.log("NO CUR STORY");
+    else console.log("WE FOUND ON BOISSSS");
   })
 })
-//adds word to story
-app.post('/addword', bodyParser.json(), (req, res)=> {
-  stories.updateOne({_id:mongodb.ObjectID(req.body.id)}, {$push: {listofwords: req.body.word}})
-  .then(()=>{
-    stories.findOne({_id:mongodb.ObjectID(req.body.id)}, (err, result)=>{
-      const isFilled = result.listofwords.length >= result.maxwords;
-      if(isFilled) {
-        stories.updateOne({_id:mongodb.ObjectID(req.body.id)}, {$set: {finishedStory: true}})
-        .then(()=>res.send({newword: req.body.word, isFilled}));
-      } else {
-        res.send({newword: req.body.word, isFilled});
-      }
-      
-    })
+
+app.get('/', (request, response) =>{
+  console.log('/')
+  let username = request.session['User'];
+  console.log(`username: ${username}`)
+  if (username == null){
+    console.log('redirect to login')
+    response.redirect('/login');
+  } else {
+    console.log('show home')
+    response.sendFile(__dirname + "/react-app/build/index.html");
+  }
+})
+
+
+app.post('/login', (request, response) => {
+  let username = request.body.username;
+  let pass = request.body.password;
+  let checkQuery = {'username': username, 'password': pass}
+  users.find(checkQuery).toArray(function(err, result){
+    if (err){
+      throw err;
+    } 
+    if (result.length == 1){
+      console.log('found and logging in ')
+      console.log(username)
+      console.log(pass)
+      setSessionUser(request, username, pass);
+      response.redirect('/');
+    } else { //username password combo not found
+      let userExistsQuery = {'username': username};
+      users.find(userExistsQuery).toArray(function(err, result){
+        if (err){
+          throw err;
+        }
+        if (result.length == 1){ //found a username
+          response.json({error: 'password'})
+        } else {//couldnt find username
+          response.json({error: 'username'})
+        }
+      })
+    }
+  })
+});
+
+app.post('/register', (request, response) => {
+  let username = request.body.username;
+  let pass = request.body.password;
+  let checkQuery = {'username': username}
+  users.find(checkQuery).toArray(function(err, result){
+    if (err){
+      throw err;
+    }
+    if (result.length == 1){
+      response.json({code: 'found'})
+    } else {
+      users.insertOne({'username': username, 'password': pass})
+      .then(setSessionUser(request, username, pass))
+      .then(() => response.json({code: 'made'}));
+    }
   })
 })
-//called when the user enters the finished stories page
-app.get('/getfinishedstories', (req, res)=> {
-  stories.find({"finishedStory": true}).toArray((err,results)=>{
-    res.send(results);
-  });
+
+app.post('/logOut', (request, response) => {
+  setSessionUser(request, null, null)
+  response.sendStatus(200)
 })
 
-//testing purposes
-app.get('/del', (req, res) => {
-  stories.remove({})
-})
 
-//gets everything else
-app.get('*', (req, res)=>{
-  res.status(200).sendFile(path.join(__dirname, "react-app", "build", "index.html"))
-})
+
+app.get("/login", (request, response) => {
+  response.sendFile(__dirname + "/react-app/build/index.html");
+});
+app.get('/currentUser', (request, respone) => {
+  respone.json({user: request.session['User']})
+});
+app.get("/register", (request, response) => {
+  response.sendFile(__dirname + "/react-app/build/index.html");
+});
+app.get("/completedStories", (request, response) => {
+  response.sendFile(__dirname + "/react-app/build/index.html");
+});
+app.get("/CreateStory", (request, response) => {
+  response.sendFile(__dirname + "/react-app/build/index.html");
+});
+
+app.get("/completeStory", (request, response) => {
+  response.sendFile(__dirname + "/react-app/build/index.html");
+});
+
+
+// gets everything else
+// app.get('*', (req, res)=>{
+//   res.status(200).sendFile(path.join(__dirname, "react-app", "build", "index.html"))
+// })
+
+app.use(express.static("react-app/build"));
 
 // start express server on port 3000
 app.listen(3000, () => {
