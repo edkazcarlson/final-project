@@ -1,5 +1,5 @@
 //this will be my server file!
-const path = require("path");
+const path = require("path"); 
 const express = require("express");
 const slash   = require('express-slash');
 const app = express(); // create express app
