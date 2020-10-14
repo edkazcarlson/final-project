@@ -26,7 +26,7 @@ export default class CompletedStoryList extends React.Component {
 
     onClick(id){
         this.props.setCurrentStory(id);
-        window.open('/#/completeStory', "_self");
+        window.open('/completeStory', "_self");
     }
 
     render() {
