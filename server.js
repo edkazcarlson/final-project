@@ -130,6 +130,10 @@ app.post('/getbyID', bodyParser.json(), (req, res) => {
   });
 })
 
+app.post('/changeVote', bodyParser.json(), (req, response) => {
+  stories.updateOne({_id: mongo.ObjectId(req.body._id)}, {$set: {votes: req.body.votes}}, { upsert: false }, (err, res) => response.send(res));
+})
+
 app.get('/', (request, response) =>{
   console.log('/')
   let username = request.session['User'];
