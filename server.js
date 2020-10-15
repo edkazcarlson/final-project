@@ -41,6 +41,14 @@ passport.deserializeUser(function (obj, done) {
     done(null, obj);
 });
 
+function loginLimitedRoute(request, response){
+  let username = request.session['User'];
+  if (username == null){
+    response.redirect('/login');
+  } else {
+    response.sendFile(__dirname + "/react-app/build/index.html");
+  }
+}
 
 app.use(cookieSession({
     name: 'session',
@@ -76,8 +84,7 @@ function setSessionUser(req, username, password) {
 
 app.get('/auth/github',
     passport.authenticate('github', {scope: ['user:email']}),
-    function (req, res) {
-    });
+    function (req, res) {});
 
 app.get('/auth/github/callback',
     passport.authenticate('github', {failureRedirect: '/login'}),
@@ -172,17 +179,8 @@ app.post('/changeVote', bodyParser.json(), (req, response) => {
     stories.updateOne({_id: mongodb.ObjectId(req.body._id)}, {$set: {votes: req.body.votes}}, {upsert: false}, (err, res) => response.send(res));
 })
 
-app.get('/', (request, response) => {
-    console.log('/')
-    let username = request.session['User'];
-    console.log(`username: ${username}`)
-    if (username == null) {
-        console.log('redirect to login')
-        response.redirect('/login');
-    } else {
-        console.log('show home')
-        response.sendFile(__dirname + "/react-app/build/index.html");
-    }
+app.get('/', (request, response) =>{
+  loginLimitedRoute(request, response)
 })
 
 
@@ -253,7 +251,7 @@ app.get("/completedStories", (request, response) => {
     response.sendFile(__dirname + "/react-app/build/index.html");
 });
 app.get("/CreateStory", (request, response) => {
-    response.sendFile(__dirname + "/react-app/build/index.html");
+  loginLimitedRoute(request, response)
 });
 
 app.get("/completeStory", (request, response) => {
@@ -267,8 +265,7 @@ app.get("/inProgressStory", (request, response) => {
 });
 
 app.get("/contribute", (request, response) => {
-    // response.json({request.body.id})
-    response.sendFile(__dirname + "/react-app/build/index.html");
+  loginLimitedRoute(request, response)
 });
 
 
