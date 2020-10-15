@@ -2,6 +2,8 @@ import axios from 'axios';
 import React from 'react';
 
 import * as Y from 'yjs'
+import { WebrtcProvider } from 'y-webrtc'
+import { WebsocketProvider } from 'y-websocket'
 import {IndexeddbPersistence} from 'y-indexeddb'
 
 const ydoc = new Y.Doc()
@@ -37,6 +39,12 @@ export default class CurrentStory extends React.Component {
                     indexeddbProvider.whenSynced.then(() => {
                         console.log('loaded data from indexed db')
                     })
+                    // Sync clients with the y-webrtc provider.
+                    const webrtcProvider = new WebrtcProvider(res.data._id, ydoc)
+                    // Sync clients with the y-websocket provider
+                    const websocketProvider = new WebsocketProvider(
+                        'wss://demos.yjs.dev', res.data._id, ydoc
+                    )
                     yarray = ydoc.getArray(res.data._id)
                     this.setState({
                         listOfWords: res.data.listofwords,
@@ -50,15 +58,16 @@ export default class CurrentStory extends React.Component {
                 yarray.observe(event => {
                     this.setState({
                         listOfWords: yarray.toArray(),
-                        curWordCount: yarray.toArray().length,
+                        curWordCount: yarray.toArray().length
+                    }, function () {
+                        if (this.state.maxWords == yarray.length) {
+                            alert("Story is complete!");
+                            //yarray.delete(0, yarray.length) NOT needed if my theory is correct :D
+                            window.open('/', '_self');
+                        } else {
+                            console.log(this.state.maxWords, yarray.length);
+                        }
                     });
-                    if (this.state.maxWords === yarray.length) {
-                        alert("Story is complete!");
-                        //yarray.delete(0, yarray.length) NOT needed if my theory is correct :D
-                        window.open('/', '_self');
-                    } else {
-                        console.log(this.state.maxWords, yarray.length);
-                    }
                 });
             })
     }
@@ -75,7 +84,6 @@ export default class CurrentStory extends React.Component {
                     document.querySelector('#nextword').value = '';
                 })
         }
-
     }
 
     render() {
