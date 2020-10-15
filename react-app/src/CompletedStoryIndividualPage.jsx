@@ -50,29 +50,15 @@ export default class CompletedStoryIndividualPage extends React.Component {
                     <ThumbUpIcon style = {{color: this.state.chosenVote == 1 ? 'red': 'black'}} onClick={() => this.setVote(1)}/>
                     <ThumbDownIcon style = {{color: this.state.chosenVote == -1 ? 'red': 'black'}} onClick={() => this.setVote(-1)}/>
                     <p>Points: {this.getVotes(this.state.story.votes)}</p>
-                    <p>{this.processStory(this.state.story.listofwords)}</p>
+                    <p>{this.state.story.listofwords.join(' ') + '.'}</p>
 
                     <p>Author: {this.state.story.contributors[0]}</p>
                     <p>Story Type: {this.state.story.storyType}</p>
-                    <p>{this.state.story.listofwords.join(' ')}</p>
                     <em>Finished at {d.toLocaleDateString()} {d.toLocaleTimeString()} and took {dur.getHours()} hours and {dur.getMinutes()} minutes to finish</em>
                 </div>
             )
         }
         return null;
-    }
-
-    processStory(story){
-        let toReturn = story[0];
-        console.log(this.state.story)
-        console.log(story)
-        story.forEach((ele, indx) => {
-            if (indx > 0){
-                toReturn += ' ' + ele
-            }
-        })
-        toReturn += '.'
-        return toReturn
     }
 
     setVote(vote) {

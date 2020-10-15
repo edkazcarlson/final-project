@@ -32,32 +32,30 @@ export default class Home extends React.Component {
             
         })
     }
-    getStories(){
-      //axios something
-      return [{title: 'sampleTitle1', id: 1, op: 'author1'}, {title: 'sampleTitle2', id: 2, op: 'author2'}]
-    }
 
     jumpToStory(id){
       this.props.setCurrentInProgressStory(id);
       window.open('/inProgressStory', "_self");
     }
+
+    test() {
+      axios.get('/del')
+    }
   render() {
     return (
       <div className="App">
-        
-        <h1>One Word Story</h1>
-        <br/>
-        <h2>Current Story</h2>
-        <br/>
-        {this.getStories().length === 0 ?
+      <h1>One Word Story</h1>
+      <br/>
+      <a href="/contribute">Contribute</a>
+      <br/>
+      <button onClick={this.test}>Reset db (for testing purposes)</button>
+      {/* {this.getStories().length === 0 ?
          <CreateStory/>: this.getStories().map((story) =>{
           return(<div onClick = {() => {this.jumpToStory(story.id)}}>
             <b>{story.title}</b> written by {story.op}
           </div>
-         )}) }
-
-        
-      </div>
+         )}) } */}
+        </div>
     );
   }
 }

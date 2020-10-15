@@ -8,6 +8,7 @@ import CompletedStoryList from './CompletedStoryList'
 import CompletedStoryIndividualPage from './CompletedStoryIndividualPage';
 import InProgressStory from './InProgressStory';
 import Login from './Login'
+import CurrentStory from './CurrentStory'
 
 export default class App extends React.Component {
   constructor(props){
@@ -40,6 +41,9 @@ export default class App extends React.Component {
         <Route path='/createstory'>
           <CreateStory/>
         </Route>
+        <Route path='/contribute'>
+         <CurrentStory/>
+        </Route>  
         <Route path='/inProgressStory'>
           <InProgressStory/>
         </Route>

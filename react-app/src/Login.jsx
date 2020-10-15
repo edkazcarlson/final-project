@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import Button from '@material-ui/core/Button';
 
 function login(e){
     console.log('login page button clicked')
@@ -88,24 +89,23 @@ export class Login extends Component {
         return (
             <div>
                 <p id = "errormsg"></p>
-                <div className="container" style = {{"margin": "10px"}}>
-                    <div className = "row">
-                        <div className = "col">
+                <div className="container" style = {{"margin": "10px", display: 'flex', justifyContent: 'space-between'}}>
+                        <div>
                             <p id = "errormsg"></p>
                             <input type='text' id='username' placeholder="Username here"/>
                             <br/>
                             <input type='text' id='password' placeholder="Password here"/>
                             <br/>
-                            <button onClick = {this.buttonClick}>Submit</button>
+                            <Button onClick = {this.buttonClick} variant="contained">Submit</Button>
                         </div>
-                        <div className = "col">
+                        <div>
                             <a href = "/auth/github" target="_blank" rel="noopener noreferrer">
                                 <p>Login with github OAuth</p>
                                 <img src = "img/githubLogo.png"/>
                             </a>
                         </div>
 
-                        {this.props.isLogin  ?  (<div className = "col">
+                        {this.props.isLogin  ?  (<div>
                             <a href="/register" >
                                 <p>
                                     Register for account
@@ -113,7 +113,6 @@ export class Login extends Component {
                             
                             </a>
                         </div>) : "" }
-                    </div>
                     
                 </div>
             </div>
