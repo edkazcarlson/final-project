@@ -1,4 +1,4 @@
-import React, {} from 'react'
+import React from 'react'
 import axios from "axios"
 import {IndexeddbPersistence} from "y-indexeddb";
 import * as Y from "yjs";
@@ -27,13 +27,18 @@ export default class CompletedStoryIndividualPage extends React.Component {
                 that.setState({
                     story: response.data.story
                 });
-                fetch("/currentUser").then(function(response) {return response.json()
-                }).then((json) => {return json.user})
-                .then((id) => {response.data.story.votes.forEach((ele) => {
-                    if (ele.id === id){
-                        that.setState({chosenVote: ele.value});
-                    }
-                })})
+                fetch("/currentUser").then(function (response) {
+                    return response.json()
+                }).then((json) => {
+                    return json.user
+                })
+                    .then((id) => {
+                        response.data.story.votes.forEach((ele) => {
+                            if (ele.id === id) {
+                                that.setState({chosenVote: ele.value});
+                            }
+                        })
+                    })
 
                 console.log(that.state)
             })
@@ -47,14 +52,17 @@ export default class CompletedStoryIndividualPage extends React.Component {
             return (
                 <div style={{marginLeft: '10px'}}>
                     <h2>{this.state.story.title}</h2>
-                    <ThumbUpIcon style = {{color: this.state.chosenVote === 1 ? 'red': 'black'}} onClick={() => this.setVote(1)}/>
-                    <ThumbDownIcon style = {{color: this.state.chosenVote === -1 ? 'red': 'black'}} onClick={() => this.setVote(-1)}/>
+                    <ThumbUpIcon style={{color: this.state.chosenVote === 1 ? 'red' : 'black'}}
+                                 onClick={() => this.setVote(1)}/>
+                    <ThumbDownIcon style={{color: this.state.chosenVote === -1 ? 'red' : 'black'}}
+                                   onClick={() => this.setVote(-1)}/>
                     <p>Points: {this.getVotes(this.state.story.votes)}</p>
                     <p>{this.state.story.listofwords.join(' ') + '.'}</p>
 
                     <p>Author: {this.state.story.contributors[0]}</p>
                     <p>Story Type: {this.state.story.storyType}</p>
-                    <em>Finished at {d.toLocaleDateString()} {d.toLocaleTimeString()} and took {dur.getHours()} hours and {dur.getMinutes()} minutes to finish</em>
+                    <em>Finished at {d.toLocaleDateString()} {d.toLocaleTimeString()} and took {dur.getHours()} hours
+                        and {dur.getMinutes()} minutes to finish</em>
                 </div>
             )
         }
@@ -65,29 +73,35 @@ export default class CompletedStoryIndividualPage extends React.Component {
         //where vote is -1, 0, or 1
         console.log(this.state.chosenVote)
         console.log(vote)
-        if (this.state.chosenVote === 0){
+        if (this.state.chosenVote === 0) {
             this.setState({chosenVote: vote})
-        }else {
+        } else {
             this.setState({chosenVote: 0})
             vote = 0
         }
         console.log("Voting!")
         let that = this;
         let newVotes = that.state.story.votes;
-        fetch("/currentUser").then(function(response) {return response.json()
-        }).then( function( json ) {
-            if(!newVotes.map(a => a.id).includes(json.user)) {
+        fetch("/currentUser").then(function (response) {
+            return response.json()
+        }).then(function (json) {
+            if (!newVotes.map(a => a.id).includes(json.user)) {
                 that.state.story.votes.push({id: json.user, value: vote});
             } else {
-                that.state.story.votes[that.state.story.votes.indexOf(that.state.story.votes.find(obj => obj.id === json.user))] = {id: json.user, value: vote};
+                that.state.story.votes[that.state.story.votes.indexOf(that.state.story.votes.find(obj => obj.id === json.user))] = {
+                    id: json.user,
+                    value: vote
+                };
             }
             console.log(that.state.story.votes);
             axios.post('/changeVote', {
                 _id: that.state.story._id,
                 votes: that.state.story.votes
-            }).then(response => { that.forceUpdate();
-            console.log("reached here");})
-         })
+            }).then(response => {
+                that.forceUpdate();
+                console.log("reached here");
+            })
+        })
 
     }
 

@@ -1,17 +1,18 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 
 export class InProgressStory extends Component {
-    constructor(props){
+    constructor(props) {
         super(props)
     }
 
-    componentDidMount(){
+    componentDidMount() {
         // const urlParams = new URLSearchParams(window.location.search);
         // const _id = urlParams.get('id');
     }
+
     render() {
         return (
-            <div >
+            <div>
 
             </div>
         )
