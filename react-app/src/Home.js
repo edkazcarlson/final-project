@@ -1,5 +1,7 @@
 import axios from 'axios';
 import React from 'react';
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import './App.css';
 import CreateStory from './CreateStory'
 
 /* two ways we can format website (imo):
@@ -10,6 +12,21 @@ otherwise, the story can just be edited on the homepage.
 IF we want users to only edit when they are logged in, we should have story be editable on a different page
 in my opinion and just have homepage be more of a login page.
 */
+
+const theme = createMuiTheme({
+  palette: {
+    type: 'dark',
+    primary: {
+      // Purple and green play nicely together.
+      main: "#7e57c2",
+    },
+    secondary: {
+      // This is green.A700 as hex.
+      main: '#76ff03',
+    },
+  },
+});
+
 export default class Home extends React.Component {
     constructor(props) {
         super(props);
@@ -43,21 +60,23 @@ export default class Home extends React.Component {
     }
   render() {
     return (
+      <ThemeProvider theme={theme}>
       <div className="App">
         
-        <h1>One Word Story</h1>
+        <h1 className = "title">One Word Story</h1>
         <br/>
-        <h2>Current Story</h2>
+        <h2 className ="subtitle">Current Story</h2>
         <br/>
         {this.getStories().length === 0 ?
          <CreateStory/>: this.getStories().map((story) =>{
-          return(<div onClick = {() => {this.jumpToStory(story.id)}}>
+          return(<div className = "content" onClick = {() => {this.jumpToStory(story.id)}}>
             <b>{story.title}</b> written by {story.op}
           </div>
          )}) }
 
         
       </div>
+      </ThemeProvider>
     );
   }
 }

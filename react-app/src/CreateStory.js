@@ -1,11 +1,33 @@
 import React from 'react';
 import axios from "axios"
 import * as Y from 'yjs'
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControl from '@material-ui/core/FormControl';
+import FormLabel from '@material-ui/core/FormLabel';
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { WebrtcProvider } from 'y-webrtc'
 import { WebsocketProvider } from 'y-websocket'
 import { IndexeddbPersistence } from 'y-indexeddb'
 
 const ydoc = new Y.Doc()
+
+const theme = createMuiTheme({
+    spacing: 8,
+    palette: {
+      type: 'dark',
+      primary: {
+        main: "#7e57c2", //purple
+      },
+      secondary: {
+        main: '#76ff03', //green
+      },
+    },
+  });
+
 
 export default class CreateStory extends React.Component {
 
@@ -37,18 +59,26 @@ export default class CreateStory extends React.Component {
  }
   render() {
     return (
+    <ThemeProvider theme={theme}>
       <div className="App">
-        <h1>Create Story</h1><br/>
+        <h1 className="subtitle">Create Story</h1><br/>
         <form>
-            <label for="storylength">Story length </label><input id="storylength" type="number" name="storylength" className="storyInput"/><br/>
-            <label for="storyfirstword">Story first word </label><input id="storyfirstword" name="storyfirstword" className="storyInput"/><br/>
-            <label htmlFor="skip">Number of Contributions before Recontributing (should probably have a longer explanation for this bit) </label><input id="skip" type="number" name="skip" className="storyInput"/><br/>
-            <input type="radio" id="word" name="storyType" value="word" checked/><label htmlFor="word">Word</label><br/>
-            <input type="radio" id="phrase" name="storyType" value="phrase"/><label htmlFor="phrase">Phrase</label><br/>
-            <input type="submit" value="Create Story" id="createStory" onClick={this.createStory}/><br/>
+            
+            <TextField style={{margin: theme.spacing(1)}} id="storylength" label="Story length" type="number" placeholder="Story length" variant="filled" className="storyInput" margin="normal" InputLabelProps={{shrink: true,}}/>
+            <TextField style={{margin: theme.spacing(1)}} id="storyfirstword" label="First word of story" type="number" placeholder="First word of story" variant="filled" className="storyInput" margin="normal" InputLabelProps={{shrink: true,}}/><br/>
+            <TextField style={{margin: theme.spacing(1)}} id="skip" label="Repeat frequency" type="number" placeholder="Repeat frequency" helperText="How many turns users must wait before recontributing." variant="filled" className="storyInput" margin="normal" InputLabelProps={{shrink: true,}}/><br/>
+            <FormControl component="inputlength" margin="normal">
+                <FormLabel component="legend">Choose how users can contribute</FormLabel>
+                <RadioGroup name="storyType">
+                    <FormControlLabel style={{color: "rgba(255, 255, 255, 87)"}} value="word" control={<Radio />} label="One word at a time" />
+                    <FormControlLabel style={{color: "rgba(255, 255, 255, 87)"}} value="phrase" control={<Radio />} label="Short phrases" />
+                 </RadioGroup>
+            </FormControl><br/>
+            <Button style = {{fontSize: '16px'}} variant="contained" onClick = {this.createStory}>Create Story</Button><br/>
         </form><br/>
         <a href="/">Return to homepage</a>
       </div>
+      </ThemeProvider>
     );
   }
 }

@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import './App.css';
 
 function login(e){
     console.log('login page button clicked')

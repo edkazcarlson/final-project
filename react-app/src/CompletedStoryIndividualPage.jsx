@@ -2,6 +2,7 @@ import React, {} from 'react'
 import axios from "axios"
 import {IndexeddbPersistence} from "y-indexeddb";
 import * as Y from "yjs";
+import './App.css';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 

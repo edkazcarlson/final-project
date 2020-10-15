@@ -1,5 +1,6 @@
 import React from 'react';
 import './App.css';
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Home from './Home'
 import CreateStory from './CreateStory'
@@ -8,6 +9,18 @@ import CompletedStoryList from './CompletedStoryList'
 import CompletedStoryIndividualPage from './CompletedStoryIndividualPage';
 import InProgressStory from './InProgressStory';
 import Login from './Login'
+
+const theme = createMuiTheme({
+  palette: {
+    type: 'dark',
+    primary: {
+      main: "#7e57c2", //purple
+    },
+    secondary: {
+      main: '#76ff03', //green
+    },
+  },
+});
 
 export default class App extends React.Component {
   constructor(props){
@@ -24,6 +37,7 @@ export default class App extends React.Component {
   }
   render() {
     return(
+      <ThemeProvider theme={theme}>
     <Router>
         <TopBar/>
         <Route exact path='/'>
@@ -54,6 +68,7 @@ export default class App extends React.Component {
         </Route>
 
     </Router>
+    </ThemeProvider>
     );
   }
 }
