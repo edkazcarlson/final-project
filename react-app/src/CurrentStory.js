@@ -23,7 +23,7 @@ export default class CurrentStory extends React.Component {
             title: '',
             id: -1,
             curWordCount: 0,
-            isWordType: null
+            isWordType: null,
         }
     }
 

@@ -142,7 +142,7 @@ app.post('/addword', bodyParser.json(), (req, res) => {
             stories.findOne({_id: mongodb.ObjectID(req.body.id)}, (err, result) => {
                 const isFilled = result.listofwords.length >= result.maxwords;
                 if (isFilled) {
-                    stories.updateOne({_id: mongodb.ObjectID(req.body.id)}, {$set: {finishedStory: true}})
+                    stories.updateOne({_id: mongodb.ObjectID(req.body.id)}, {$set: {finishedStory: true, timeEnd: Date.now()}})
                         .then(() => res.send({newword: req.body.word, isFilled}));
                 } else {
                     res.send({newword: req.body.word, isFilled});

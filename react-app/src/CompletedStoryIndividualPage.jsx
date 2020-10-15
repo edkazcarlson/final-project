@@ -47,8 +47,9 @@ export default class CompletedStoryIndividualPage extends React.Component {
 
     render() {
         if (this.state.story != null) {
-            const d = new Date(this.state.story.timeEnd * 1000)
-            const dur = new Date((this.state.story.timeEnd - this.state.story.timeStart) * 1000)
+            const d = new Date(this.state.story.timeEnd)
+            console.log(this.state.story.timeEnd - this.state.story.timeStart)
+            const dur = this.state.story.timeEnd - this.state.story.timeStart
             return (
                 <div style={{marginLeft: '10px', display: 'flex'}}>
                     <div style = {{marginRight: '10px'}}>
@@ -57,8 +58,8 @@ export default class CompletedStoryIndividualPage extends React.Component {
                         <p>Points: {this.getVotes(this.state.story.votes)}</p>
                         <p>Author: {this.state.story.contributors[0]}</p>
                         <p>Story Type: {this.state.story.storyType}</p>
-                        <em>Finished at {d.toLocaleDateString()} {d.toLocaleTimeString()} </em> <br/>
-                        <em>Took {dur.getHours()} hours and {dur.getMinutes()} minutes to finish</em>
+                        <em>Finished on {d.toLocaleDateString()} at {d.toLocaleTimeString()} </em> <br/>
+                        <em>Took {Math.floor(dur / 3600000)} hour{(Math.floor(dur / 3600000) == 1) ? "" : "s"} and {Math.floor(dur / 60000) % 60} minute{(Math.floor(dur / 60000) % 60 == 1) ? "" : "s"} to finish</em>
                     </div>
                     <div>
                         <h2 style = {{textAlign: 'center'}}>{this.state.story.title}</h2>
