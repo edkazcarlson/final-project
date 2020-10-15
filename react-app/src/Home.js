@@ -55,6 +55,10 @@ export default class Home extends React.Component {
             <b>{story.title}</b> written by {story.op}
           </div>
          )}) } */}
+         <div>
+         Icon made by icon king from www.freeicons.io
+         </div>
+         
         </div>
     );
   }

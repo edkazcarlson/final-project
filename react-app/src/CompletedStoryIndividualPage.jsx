@@ -63,7 +63,14 @@ export default class CompletedStoryIndividualPage extends React.Component {
 
     setVote(vote) {
         //where vote is -1, 0, or 1
-        this.setState({chosenVote: vote})
+        console.log(this.state.chosenVote)
+        console.log(vote)
+        if (this.state.chosenVote == 0){
+            this.setState({chosenVote: vote})
+        }else {
+            this.setState({chosenVote: 0})
+            vote = 0
+        }
         console.log("Voting!")
         let that = this;
         let newVotes = that.state.story.votes;
@@ -81,6 +88,7 @@ export default class CompletedStoryIndividualPage extends React.Component {
             }).then(response => { that.forceUpdate();
             console.log("reached here");})
          })
+
     }
 
     //assumes that vote objects in the votes array have a value field alongside an id field
