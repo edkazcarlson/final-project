@@ -30,18 +30,33 @@ const theme = createMuiTheme({
 
 
 export default class CreateStory extends React.Component {
+  constructor(props){
+    super(props)
+    this.state = {storyLength: null, firstWord: '', frequency: ''}
+  }
 
- createStory(e) {
+  setStoryLength(len){
+    this.setState({storyLength: len.target.value})
+  }
+  setfirstWord(e){
+    this.setState({firstWord: e.target.value})
+  }
+  setFrequency(e){
+    this.setState({frequency: e.target.value})
+  }
+
+
+  createStory(e) {
     e.preventDefault();
     const inputs = document.querySelectorAll('.storyInput');
-    if(valid()) { //validates data and sends alert if data is invalid
+    if(this.valid()) { //validates data and sends alert if data is invalid
         fetch("/currentUser").then(function(response) {return response.json()
-        }).then( function( json ) {
+        }).then( (json) => {
             axios.post('/addstory', {
                 author: json.user,
-                storylength: inputs[0].value,
-                storyfirstword: inputs[1].value.trim(),
-                skip: inputs[2].value,
+                storylength: this.state.storyLength,
+                storyfirstword: this.state.firstWord.trim(),
+                skip: this.state.frequency.value,
                 storyType: document.querySelector('input[name="storyType"]:checked').value
             })
             .then(response => {
@@ -64,9 +79,22 @@ export default class CreateStory extends React.Component {
         <h1 className="subtitle">Create Story</h1><br/>
         <form>
             
-            <TextField style={{margin: theme.spacing(1)}} id="storylength" label="Story length" type="number" placeholder="Story length" variant="filled" className="storyInput" margin="normal" InputLabelProps={{shrink: true,}}/>
-            <TextField style={{margin: theme.spacing(1)}} id="storyfirstword" label="First word of story" type="number" placeholder="First word of story" variant="filled" className="storyInput" margin="normal" InputLabelProps={{shrink: true,}}/><br/>
-            <TextField style={{margin: theme.spacing(1)}} id="skip" label="Repeat frequency" type="number" placeholder="Repeat frequency" helperText="How many turns users must wait before recontributing." variant="filled" className="storyInput" margin="normal" InputLabelProps={{shrink: true,}}/><br/>
+            <TextField style={{margin: theme.spacing(1)}} id="storylength" 
+              label="Story length" type="number" placeholder="Story length" 
+              variant="filled" className="storyInput" margin="normal" InputLabelProps={{shrink: true}} 
+              value = {this.state.storyLength}
+              onChange = {(event) => {this.setStoryLength(event)}}/>
+            <TextField style={{margin: theme.spacing(1)}} id="storyfirstword"
+             label="First word of story" type="text" placeholder="First word of story" 
+             variant="filled" className="storyInput" margin="normal" InputLabelProps={{shrink: true,}}
+             value = {this.state.firstWord}
+             onChange = {(event) => {this.setfirstWord(event)}}
+             /><br/>
+            <TextField style={{margin: theme.spacing(1)}} id="skip" label="Repeat frequency" type="number" placeholder="Repeat frequency" 
+            helperText="How many turns users must wait before recontributing." variant="filled" className="storyInput" margin="normal" 
+            InputLabelProps={{shrink: true,}}
+            value = {this.state.frequency}
+            onChange = {(event) => {this.setFrequency(event)}}/><br/>
             <FormControl component="inputlength" margin="normal">
                 <FormLabel component="legend">Choose how users can contribute</FormLabel>
                 <RadioGroup name="storyType">
@@ -74,28 +102,33 @@ export default class CreateStory extends React.Component {
                     <FormControlLabel style={{color: "rgba(255, 255, 255, 87)"}} value="phrase" control={<Radio />} label="Short phrases" />
                  </RadioGroup>
             </FormControl><br/>
-            <Button style = {{fontSize: '16px'}} variant="contained" onClick = {this.createStory}>Create Story</Button><br/>
+            <Button style = {{fontSize: '16px'}} variant="contained" onClick = {(e) => {this.createStory(e)}}>Create Story</Button><br/>
         </form><br/>
         <a href="/">Return to homepage</a>
       </div>
       </ThemeProvider>
     );
   }
-}
 
-function valid() {
+  valid() {
     const inputs = document.querySelectorAll('.storyInput');
+    console.log(this)
+    console.log(inputs)
+    console.log(this.state.storyLength)
     const storyType = document.querySelector('input[name="storyType"]:checked').value;
-    if(!(0 < parseInt(inputs[0].value) && parseInt(inputs[0].value) < 100)) { //don't need to check type, only length, because input is type number
+    if(!(0 < parseInt(this.state.storyLength) && parseInt(this.state.storyLength) < 100)) { //don't need to check type, only length, because input is type number
         alert("Please choose a story length between 0 and 100 words.");
-    } else if (storyType === "word" && inputs[1].value.trim() !== inputs[1].value.replace(/ /g,'')) {
+    } else if (storyType === "word" && this.state.firstWord.trim() !== this.state.firstWord.replace(/ /g,'')) {
         alert("Please enter a word or switch the story type to phrase.")
-    } else if (storyType === "phrase" && inputs[1].value.length > 200) {
+    } else if (storyType === "phrase" && this.state.firstWord.length > 200) {
         alert("Please enter a phrase less than 200 characters.")
-    } else if (!(0 <= parseInt(inputs[2].value) && parseInt(inputs[2].value) < parseInt(inputs[0].value))) {
+    } else if (!(0 <= parseInt(this.state.frequency) && parseInt(this.state.frequency) < parseInt(this.state.storyLength))) {
         alert("Please choose a skip value between 0 and the maximum story length.")
     } else {
         return true;
     }
     return false;
+  }
+
 }
+
