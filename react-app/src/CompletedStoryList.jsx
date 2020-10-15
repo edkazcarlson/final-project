@@ -39,7 +39,7 @@ export default class CompletedStoryList extends React.Component {
                             <b style = {{marginRight: '5px'}}>{`${story.votes}:`}</b>
                             <div  style = {{color: 'blue'}}>{story.title}</div>
                         </div>
-                        <p>{'\t' + this.getFirstWords(story.listofwords)}</p>
+                        <p style = {{marginLeft: '5px'}}>{this.getFirstWords(story.listofwords)}</p>
                        </div>)
                })}
             </div>)
