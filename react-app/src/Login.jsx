@@ -20,7 +20,7 @@ function login(e){
         }
     })
     .then(function(response){
-        if (response.redirected == true){
+        if (response.redirected === true){
         window.open(response.url, "_self")
         } else {
         return  response.json()
@@ -29,10 +29,10 @@ function login(e){
     })
     .then( function( json ) {
         let errmsg = document.getElementById('errormsg');
-        if (json.error == 'password'){
-        errmsg.innerText = "Password Incorrect"
+        if (json.error.toString() === 'password') {
+            errmsg.innerText = "Password Incorrect"
         } else { //username not found
-        errmsg.innerText = "Username not found"
+            errmsg.innerText = "Username not found"
         }
     })
 
@@ -88,10 +88,10 @@ export class Login extends Component {
     render() {
         return (
             <div>
-                <p id = "errormsg"></p>
+                <p id = "errormsg"/>
                 <div className="container" style = {{"margin": "10px", display: 'flex', justifyContent: 'space-between'}}>
                         <div>
-                            <p id = "errormsg"></p>
+                            <p id = "errormsg"/>
                             <input type='text' id='username' placeholder="Username here"/>
                             <br/>
                             <input type='text' id='password' placeholder="Password here"/>
@@ -101,7 +101,7 @@ export class Login extends Component {
                         <div>
                             <a href = "/auth/github" target="_blank" rel="noopener noreferrer">
                                 <p>Login with github OAuth</p>
-                                <img src = "img/githubLogo.png"/>
+                                <img src = "img/githubLogo.png" alt="GitHub logo"/>
                             </a>
                         </div>
 

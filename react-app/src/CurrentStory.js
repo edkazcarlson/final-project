@@ -2,8 +2,6 @@ import axios from 'axios';
 import React from 'react';
 
 import * as Y from 'yjs'
-import { WebrtcProvider } from 'y-webrtc'
-import { WebsocketProvider } from 'y-websocket'
 import { IndexeddbPersistence } from 'y-indexeddb'
 
 const ydoc = new Y.Doc()
@@ -11,10 +9,9 @@ let yarray
 
 /*
 TODO:
--add client side validation to check if they enter a "valid word" (same as for CreateStory.js)
 -add feature to limit user to contributing. this is based on the setting when they create a story.
 */
-const listOfWords = ydoc.getArray('listofwords')
+// const listOfWords = ydoc.getArray('listofwords')
 export default class CurrentStory extends React.Component {
     constructor(props) {
         super(props);
@@ -31,24 +28,15 @@ export default class CurrentStory extends React.Component {
     componentDidMount() {
         axios.get('/getcurstory')
         .then(res=> {
-            if(res.data.status=="nostory") {
+            if(res.data.status==="nostory") {
                 window.open('/createstory', "_self");
-
             } else {
-                this.setState({isWordType: res.data.storyType == 'word'})
+                this.setState({isWordType: res.data.storyType === 'word'})
                 // this allows you to instantly get the (cached) documents data
                 const indexeddbProvider = new IndexeddbPersistence(res.data._id, ydoc)
                 indexeddbProvider.whenSynced.then(() => {
                 console.log('loaded data from indexed db')
                 })
-
-                // Sync clients with the y-webrtc provider.
-                const webrtcProvider = new WebrtcProvider(res.data._id, ydoc)
-
-                // Sync clients with the y-websocket provider
-                const websocketProvider = new WebsocketProvider(
-                'wss://demos.yjs.dev', res.data._id, ydoc
-                )
                 yarray = ydoc.getArray(res.data._id)
                 this.setState({
                     listOfWords: res.data.listofwords,
@@ -64,7 +52,7 @@ export default class CurrentStory extends React.Component {
                     listOfWords: yarray.toArray(),
                     curWordCount: yarray.toArray().length,
                 });
-                if(this.state.maxWords==yarray.length) {
+                if(this.state.maxWords===yarray.length) {
                     alert("Story is complete!");
                     //yarray.delete(0, yarray.length) NOT needed if my theory is correct :D
                     window.open('/', '_self');
@@ -98,7 +86,7 @@ export default class CurrentStory extends React.Component {
               ))}
               <br/>
               <form>
-                  <label for="nextword">Next Word:</label><input id="nextword" name="nextword"/>
+                  <label for="nextword">Next {this.state.isWordType? "Word" : "Phrase"}: </label><input id="nextword" name="nextword"/>
                 <input type="submit" onClick={this.addWord.bind(this)}/>
                 
               </form>

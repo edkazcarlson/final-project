@@ -47,8 +47,8 @@ export default class CompletedStoryIndividualPage extends React.Component {
             return (
                 <div style={{marginLeft: '10px'}}>
                     <h2>{this.state.story.title}</h2>
-                    <ThumbUpIcon style = {{color: this.state.chosenVote == 1 ? 'red': 'black'}} onClick={() => this.setVote(1)}/>
-                    <ThumbDownIcon style = {{color: this.state.chosenVote == -1 ? 'red': 'black'}} onClick={() => this.setVote(-1)}/>
+                    <ThumbUpIcon style = {{color: this.state.chosenVote === 1 ? 'red': 'black'}} onClick={() => this.setVote(1)}/>
+                    <ThumbDownIcon style = {{color: this.state.chosenVote === -1 ? 'red': 'black'}} onClick={() => this.setVote(-1)}/>
                     <p>Points: {this.getVotes(this.state.story.votes)}</p>
                     <p>{this.state.story.listofwords.join(' ') + '.'}</p>
 
@@ -65,7 +65,7 @@ export default class CompletedStoryIndividualPage extends React.Component {
         //where vote is -1, 0, or 1
         console.log(this.state.chosenVote)
         console.log(vote)
-        if (this.state.chosenVote == 0){
+        if (this.state.chosenVote === 0){
             this.setState({chosenVote: vote})
         }else {
             this.setState({chosenVote: 0})

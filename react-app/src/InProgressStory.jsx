@@ -6,8 +6,8 @@ export class InProgressStory extends Component {
     }
 
     componentDidMount(){
-        const urlParams = new URLSearchParams(window.location.search);
-        const _id = urlParams.get('id');
+        // const urlParams = new URLSearchParams(window.location.search);
+        // const _id = urlParams.get('id');
     }
     render() {
         return (
