@@ -24,6 +24,7 @@ export default class CurrentStory extends React.Component {
             title: '',
             id: -1,
             curWordCount: 0,
+            isWordType : null
         }        
     }
     
@@ -34,7 +35,7 @@ export default class CurrentStory extends React.Component {
                 window.open('/createstory', "_self");
 
             } else {
-
+                this.setState({isWordType: res.data.storyType == 'word'})
                 // this allows you to instantly get the (cached) documents data
                 const indexeddbProvider = new IndexeddbPersistence(res.data._id, ydoc)
                 indexeddbProvider.whenSynced.then(() => {
@@ -76,11 +77,16 @@ export default class CurrentStory extends React.Component {
     addWord(e) {
         const nextword = document.querySelector('#nextword').value;
         e.preventDefault();
-        axios.post('/addword', {'id':this.state.id, 'word': nextword})
-        .then(response=> {
-            yarray.push([response.data.newword]);
-            document.querySelector('#nextword').value='';
-        })
+        if (nextword.split(' ').length > 1 && this.state.isWordType){
+            alert('Cannot upload multiple words for this story');
+        } else {
+            axios.post('/addword', {'id':this.state.id, 'word': nextword})
+            .then(response=> {
+                yarray.push([response.data.newword]);
+                document.querySelector('#nextword').value='';
+            })
+        }
+
     }
   render() {
     return (
@@ -97,7 +103,7 @@ export default class CurrentStory extends React.Component {
                 
               </form>
               <br/>
-              <h4>There are {this.state.maxWords - this.state.curWordCount} words left!</h4>
+              <h4>There are {this.state.maxWords - this.state.curWordCount} {this.state.isWordType? 'words': 'phrases'} left!</h4>
           </div>
       </div>
     );

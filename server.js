@@ -47,8 +47,8 @@ app.use(cookieSession({
   name: 'session',
   keys: ['key1', 'key2']
 }))
-const mongo = require('mongodb');
-const MongoClient = mongo.MongoClient;
+const mongodb = require('mongodb');
+const MongoClient = mongodb.MongoClient;
 const uri = "mongodb+srv://user:aNy7D3J1XbTT2@cluster0.ajcp4.mongodb.net/<dbname>?retryWrites=true&w=majority";
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 let stories = null;
@@ -113,9 +113,36 @@ app.post('/addstory', bodyParser.json(), (req, res) => {
 
 app.get('/getcurstory', (req, res) => {
   stories.findOne({finishedStory: false}, (err, result)=> {
-    if(result==null) console.log("NO CUR STORY");
-    else console.log("WE FOUND ON BOISSSS");
+    if(result==null) res.send({status:"nostory"});
+    else res.send(result);
   })
+})
+//adds word to story
+app.post('/addword', bodyParser.json(), (req, res)=> {
+  stories.updateOne({_id:mongodb.ObjectID(req.body.id)}, {$push: {listofwords: req.body.word}})
+  .then(()=>{
+    stories.findOne({_id:mongodb.ObjectID(req.body.id)}, (err, result)=>{
+      const isFilled = result.listofwords.length >= result.maxwords;
+      if(isFilled) {
+        stories.updateOne({_id:mongodb.ObjectID(req.body.id)}, {$set: {finishedStory: true}})
+        .then(()=>res.send({newword: req.body.word, isFilled}));
+      } else {
+        res.send({newword: req.body.word, isFilled});
+      }
+      
+    })
+  })
+})
+
+//called when the user enters the finished stories page
+app.get('/getfinishedstories', (req, res)=> {
+  stories.find({"finishedStory": true}).toArray((err,results)=>{
+    res.send(results);
+  });
+})
+
+app.get('/del', (req, res) => {
+  stories.remove({})
 })
 
 app.get('/getallcompleted', (req, res) => {
@@ -125,13 +152,13 @@ app.get('/getallcompleted', (req, res) => {
 })
 
 app.post('/getbyID', bodyParser.json(), (req, res) => {
-  stories.find({_id: mongo.ObjectId(req.body._id), finishedStory: true}).toArray(function(err, result){
+  stories.find({_id: mongodb.ObjectId(req.body._id), finishedStory: true}).toArray(function(err, result){
     res.json({story: result[0]});
   });
 })
 
 app.post('/changeVote', bodyParser.json(), (req, response) => {
-  stories.updateOne({_id: mongo.ObjectId(req.body._id)}, {$set: {votes: req.body.votes}}, { upsert: false }, (err, res) => response.send(res));
+  stories.updateOne({_id: mongodb.ObjectId(req.body._id)}, {$set: {votes: req.body.votes}}, { upsert: false }, (err, res) => response.send(res));
 })
 
 app.get('/', (request, response) =>{
@@ -225,6 +252,11 @@ app.get("/completeStory", (request, response) => {
 });
 
 app.get("/inProgressStory", (request, response) => {
+  // response.json({request.body.id})
+  response.sendFile(__dirname + "/react-app/build/index.html");
+});
+
+app.get("/contribute", (request, response) => {
   // response.json({request.body.id})
   response.sendFile(__dirname + "/react-app/build/index.html");
 });
