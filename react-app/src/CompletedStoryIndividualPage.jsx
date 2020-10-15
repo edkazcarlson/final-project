@@ -2,13 +2,16 @@ import React, {} from 'react'
 import axios from "axios"
 import {IndexeddbPersistence} from "y-indexeddb";
 import * as Y from "yjs";
+import ThumbUpIcon from '@material-ui/icons/ThumbUp';
+import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 
 export default class CompletedStoryIndividualPage extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            story: null
+            story: null,
+            chosenVote: null,
         };
     }
 
@@ -24,6 +27,14 @@ export default class CompletedStoryIndividualPage extends React.Component {
                 that.setState({
                     story: response.data.story
                 });
+                fetch("/currentUser").then(function(response) {return response.json()
+                }).then((json) => {return json.user})
+                .then((id) => {response.data.story.votes.forEach((ele) => {
+                    if (ele.id === id){
+                        that.setState({chosenVote: ele.value});
+                    }
+                })})
+
                 console.log(that.state)
             })
         })
@@ -35,9 +46,10 @@ export default class CompletedStoryIndividualPage extends React.Component {
             return (
                 <div style={{marginLeft: '10px'}}>
                     <h2>{this.state.story.title}</h2>
-                    <button onClick={() => this.setVote(1)}>+</button><button onClick={() => this.setVote(0)}>·</button><button onClick={() => this.setVote(-1)}>-</button>
+                    <ThumbUpIcon style = {{color: this.state.chosenVote == 1 ? 'red': 'black'}} onClick={() => this.setVote(1)}/>
+                    <ThumbDownIcon style = {{color: this.state.chosenVote == -1 ? 'red': 'black'}} onClick={() => this.setVote(-1)}/>
                     <p>Points: {this.getVotes(this.state.story.votes)}</p>
-                    <p>{this.state.story.listofwords}</p>
+                    <p>{this.processStory(this.state.story.listofwords)}</p>
                     <p>Author: {this.state.story.contributors[0]}</p>
                     <p>Story Type: {this.state.story.storyType}</p>
                 </div>
@@ -46,8 +58,22 @@ export default class CompletedStoryIndividualPage extends React.Component {
         return null;
     }
 
+    processStory(story){
+        let toReturn = story[0];
+        console.log(this.state.story)
+        console.log(story)
+        story.forEach((ele, indx) => {
+            if (indx > 0){
+                toReturn += ' ' + ele
+            }
+        })
+        toReturn += '.'
+        return toReturn
+    }
+
     setVote(vote) {
         //where vote is -1, 0, or 1
+        this.setState({chosenVote: vote})
         console.log("Voting!")
         let that = this;
         let newVotes = that.state.story.votes;
