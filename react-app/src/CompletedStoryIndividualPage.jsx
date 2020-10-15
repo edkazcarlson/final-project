@@ -59,8 +59,6 @@ export default class CompletedStoryIndividualPage extends React.Component {
                         <h2 style = {{textAlign: 'center'}}>{this.state.story.title}</h2>
                         <p>{this.state.story.listofwords.join(' ') + '.'}</p>
                     </div>
-                    
-
                 </div>
             )
         }
@@ -72,6 +70,7 @@ export default class CompletedStoryIndividualPage extends React.Component {
         console.log(this.state.chosenVote)
         console.log(vote)
         if (this.state.chosenVote  == vote){
+
             this.setState({chosenVote: 0})
             vote = 0;
         }else {

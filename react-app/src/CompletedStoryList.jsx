@@ -59,7 +59,7 @@ export default class CompletedStoryList extends React.Component {
         listOfWords.forEach((ele, index) => {
             if (index < 3){
                 firstX += `${ele} `;
-            } else if (index == 3){
+            } else if (index === 3){
                 firstX += '...'
             }
         })

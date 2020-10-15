@@ -1,8 +1,6 @@
 import React from 'react';
 import axios from "axios"
 import * as Y from 'yjs'
-import { WebrtcProvider } from 'y-webrtc'
-import { WebsocketProvider } from 'y-websocket'
 import { IndexeddbPersistence } from 'y-indexeddb'
 
 const ydoc = new Y.Doc()
