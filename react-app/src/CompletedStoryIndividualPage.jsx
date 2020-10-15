@@ -41,8 +41,9 @@ export default class CompletedStoryIndividualPage extends React.Component {
     }
 
     render() {
-        console.log("Render", this.state.story)
         if (this.state.story != null) {
+            const d = new Date(this.state.story.timeEnd * 1000)
+            const dur = new Date((this.state.story.timeEnd - this.state.story.timeStart) * 1000)
             return (
                 <div style={{marginLeft: '10px'}}>
                     <h2>{this.state.story.title}</h2>
@@ -50,8 +51,11 @@ export default class CompletedStoryIndividualPage extends React.Component {
                     <ThumbDownIcon style = {{color: this.state.chosenVote == -1 ? 'red': 'black'}} onClick={() => this.setVote(-1)}/>
                     <p>Points: {this.getVotes(this.state.story.votes)}</p>
                     <p>{this.processStory(this.state.story.listofwords)}</p>
+
                     <p>Author: {this.state.story.contributors[0]}</p>
                     <p>Story Type: {this.state.story.storyType}</p>
+                    <p>{this.state.story.listofwords.join(' ')}</p>
+                    <em>Finished at {d.toLocaleDateString()} {d.toLocaleTimeString()} and took {dur.getHours()} hours and {dur.getMinutes()} minutes to finish</em>
                 </div>
             )
         }

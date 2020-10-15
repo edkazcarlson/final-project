@@ -18,7 +18,7 @@ export default class CreateStory extends React.Component {
             axios.post('/addstory', {
                 author: json.user,
                 storylength: inputs[0].value,
-                storyfirstword: inputs[1].value,
+                storyfirstword: inputs[1].value.trim(),
                 skip: inputs[2].value,
                 storyType: document.querySelector('input[name="storyType"]:checked').value
             })
