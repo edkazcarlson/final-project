@@ -1,12 +1,11 @@
-import React, { Component } from 'react'
+import React, {} from 'react'
 
-// export default function CompletedStoryList(props) {
 export default class CompletedStoryList extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            demoStories : [{votes: 1, title: 'demoTitle1', id: 1}, {votes: 2, title: 'demoTitle2', id: 2}]
+            demoStories : []
         };
     }
 
@@ -15,27 +14,18 @@ export default class CompletedStoryList extends React.Component {
         fetch("/getallcompleted").then(function(response) {
             return response.json()
         })
-        .then( ( json ) => {
-            console.log(this);
-            console.log(json.stories);
+        .then( function( json ) {
             that.setState({
                 demoStories : json.stories
             });
         })
     }
 
-    onClick(id){
-        this.props.setCurrentStory(id);
-        window.open('/completeStory', "_self");
-    }
-
     render() {
         return(<div>
-            {this.props.id}
                {this.state.demoStories.map((story) =>{
                    return (<div>
-                       <p href = '/completeStory' onClick = {() => {this.onClick(story.id)}}><b>{this.getVotes(story.votes)}: </b>
-                       {story.title}</p>
+                       <b>{this.getVotes(story.votes)}: </b><button onClick={() => this.click(story._id)}>{story.title}</button>
                    </div>)
                })}
             </div>)
@@ -48,5 +38,10 @@ export default class CompletedStoryList extends React.Component {
             voteCount += votes[vote].value;
         }
         return voteCount;
+    }
+
+    click(id) {
+        this.props.setCurrentStory(id);
+        setTimeout(() => window.open('/completeStory?id='+id, "_self"), 10);
     }
 }

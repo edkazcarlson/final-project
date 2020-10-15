@@ -13,9 +13,11 @@ export default class App extends React.Component {
   constructor(props){
     super(props)
     this.state = {currentStoryID: -1, inProgressStoryID : -1}
+    this.setCurrentStory = this.setCurrentStory.bind(this);
+    this.setCurrentInProgressStory = this.setCurrentInProgressStory.bind(this);
   }
   setCurrentStory = (id) => {
-    this.setState({currentStoryID: id})
+      this.setState({currentStoryID: id});
   }
   setCurrentInProgressStory= (id) =>{
     this.setState({inProgressStoryID: id})

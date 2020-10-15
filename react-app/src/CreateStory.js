@@ -8,10 +8,7 @@ import { IndexeddbPersistence } from 'y-indexeddb'
 const ydoc = new Y.Doc()
 
 export default class CreateStory extends React.Component {
-/*
-TODO:
-add client-side validation
-*/
+
  createStory(e) {
     e.preventDefault();
     const inputs = document.querySelectorAll('.storyInput');

@@ -46,19 +46,20 @@ passport.deserializeUser(function(obj, done) {
 app.use(cookieSession({
   name: 'session',
   keys: ['key1', 'key2']
-})) 
-const MongoClient = require('mongodb').MongoClient;
+}))
+const mongo = require('mongodb');
+const MongoClient = mongo.MongoClient;
 const uri = "mongodb+srv://user:aNy7D3J1XbTT2@cluster0.ajcp4.mongodb.net/<dbname>?retryWrites=true&w=majority";
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 let stories = null;
 client.connect(err => {
   stories = client.db("data").collection("teststories");
-  stories.find({ }).toArray().then((res) => {console.log(res)})
+  // stories.find({ }).toArray().then((res) => {console.log(res)})
 });
 let users = null;
 client.connect(err => {
   users = client.db("data").collection("users");
-  users.find({ }).toArray().then((res) => {console.log(res)})
+  // users.find({ }).toArray().then((res) => {console.log(res)})
 })
 
 
@@ -120,6 +121,12 @@ app.get('/getcurstory', (req, res) => {
 app.get('/getallcompleted', (req, res) => {
   stories.find({finishedStory: true}).toArray(function(err, result){
     res.json({stories: result});
+  });
+})
+
+app.post('/getbyID', bodyParser.json(), (req, res) => {
+  stories.find({_id: mongo.ObjectId(req.body._id), finishedStory: true}).toArray(function(err, result){
+    res.json({story: result[0]});
   });
 })
 
@@ -209,6 +216,7 @@ app.get("/CreateStory", (request, response) => {
 });
 
 app.get("/completeStory", (request, response) => {
+  // response.json({request.body.id})
   response.sendFile(__dirname + "/react-app/build/index.html");
 });
 
