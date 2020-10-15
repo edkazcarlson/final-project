@@ -82,7 +82,17 @@ export class Login extends Component {
         }
     }
     
-
+    checkIfFieldsEmpty() {
+        const inputs = document.querySelectorAll('.loginField');
+        for(let i=0; i<inputs.length; i++) {
+            if(inputs[i].value=='') {
+                document.querySelector('#signin').disabled = true
+                return true
+            }
+        }
+        document.querySelector('#signin').disabled = false
+        return false
+    }
 
     render() {
         return (
@@ -92,11 +102,11 @@ export class Login extends Component {
                     <div className = "row">
                         <div className = "col">
                             <p id = "errormsg"></p>
-                            <input type='text' id='username' placeholder="Username here"/>
+                            <input type='text' id='username' className='loginField' placeholder="Username here" onInput={this.checkIfFieldsEmpty}/>
                             <br/>
-                            <input type='text' id='password' placeholder="Password here"/>
+                            <input type='password' id='password' className='loginField' placeholder="Password here" onInput={this.checkIfFieldsEmpty}/>
                             <br/>
-                            <button onClick = {this.buttonClick}>Submit</button>
+                            <button id='signin' onClick = {this.buttonClick}>{this.props.isLogin?"Login":"Signup"}</button>
                         </div>
                         <div className = "col">
                             <a href = "/auth/github" target="_blank" rel="noopener noreferrer">
