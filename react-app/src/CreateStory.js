@@ -13,31 +13,26 @@ export default class CreateStory extends React.Component {
     e.preventDefault();
     const inputs = document.querySelectorAll('.storyInput');
     if(valid()) { //validates data and sends alert if data is invalid
-        axios.post('/addstory', {
-            author: "Insert user ID",
-            storylength: inputs[0].value,
-            storyfirstword: inputs[1].value,
-            skip: inputs[2].value,
-            storyType: document.querySelector('input[name="storyType"]:checked').value
-        })
+        fetch("/currentUser").then(function(response) {return response.json()
+        }).then( function( json ) {
+            axios.post('/addstory', {
+                author: json.user,
+                storylength: inputs[0].value,
+                storyfirstword: inputs[1].value,
+                skip: inputs[2].value,
+                storyType: document.querySelector('input[name="storyType"]:checked').value
+            })
             .then(response => {
                 // this allows you to instantly get the (cached) documents data
                 const indexeddbProvider = new IndexeddbPersistence(response.data._id, ydoc)
                 indexeddbProvider.whenSynced.then(() => {
                     console.log('loaded data from indexed db: ' + response)
                 })
-
-                // Sync clients with the y-webrtc provider.
-                const webrtcProvider = new WebrtcProvider(response.data._id, ydoc)
-
-                // Sync clients with the y-websocket provider
-                const websocketProvider = new WebsocketProvider(
-                    'wss://demos.yjs.dev', response.data._id, ydoc
-                )
                 const yarray = ydoc.getArray(response.data._id);
                 yarray.insert(0, [response.data.listofwords[0]]);
                 alert("Story created successfully!");
             })
+         })
     }
  }
   render() {
@@ -61,8 +56,6 @@ export default class CreateStory extends React.Component {
 function valid() {
     const inputs = document.querySelectorAll('.storyInput');
     const storyType = document.querySelector('input[name="storyType"]:checked').value;
-    console.log(0 <= parseInt(inputs[2].value))
-    console.log(parseInt(inputs[2].value) < parseInt(inputs[0].value))
     if(!(0 < parseInt(inputs[0].value) && parseInt(inputs[0].value) < 100)) { //don't need to check type, only length, because input is type number
         alert("Please choose a story length between 0 and 100 words.");
     } else if (storyType === "word" && inputs[1].value.trim() !== inputs[1].value.replace(/ /g,'')) {
