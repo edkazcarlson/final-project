@@ -76,10 +76,10 @@ export default class CompletedStoryIndividualPage extends React.Component {
             return (
                 <div style={{display:"flex", alignItems: "center", justifyContent: "center"}}>
                 <ThemeProvider theme={theme}>
-                <Paper style={{width: 400, padding: theme.spacing(2), display: 'flex', flexDirection: "column", flexWrap: "wrap"}}>
+                <Paper style={{minHeight: 400, minWidth: 400, padding: theme.spacing(2), display: 'flex', flexDirection: "column", flexWrap: "wrap"}}>
                     <div>
                          <h1 className="title" id="title" style = {{textAlign: 'center', color: 'white'}}>{this.state.story.title}</h1>{this.state.isAuthor?
-                         <Button id="editTitle" variant="contained" onClick = {this.editTitle.bind(this)}>edit</Button>:null}
+                         <Button id="editTitle" variant="contained" onClick = {this.editTitle.bind(this)}>edit title</Button>:null}
                          <p style = {{color: 'white'}}>{this.state.story.listofwords.join(' ') + '.'}</p>
                     </div>
                     <div style = {{marginRight: '10px'}}>
@@ -89,7 +89,8 @@ export default class CompletedStoryIndividualPage extends React.Component {
                         <p className="lowPriority">Author: {this.state.story.contributors[0]}</p>
                         <p className="lowPriority">Story Type: {this.state.story.storyType}</p>
                         <em className="lowPriority">Finished {d.toLocaleDateString()} at {d.toLocaleTimeString()} </em> <br/>
-                        <em className="lowPriority">Took {Math.floor(dur / 3600000)} hour{(Math.floor(dur / 3600000) == 1) ? "" : "s"} and {Math.floor(dur / 60000) % 60} minute{(Math.floor(dur / 60000) % 60 == 1) ? "" : "s"} to complete.</em>
+                         <em className="lowPriority">Took 
+                         {Math.floor(dur / 3600000) > 0 ? (Math.floor(dur / 3600000) + 'hour' + ((Math.floor(dur / 3600000) == 1) ? "" : "s")): ''} {Math.floor(dur / 60000) % 60} minute{(Math.floor(dur / 60000) % 60 == 1) ? "" : "s"} to complete.</em>
                     </div>
                 </Paper>
                 </ThemeProvider>
@@ -102,11 +103,11 @@ export default class CompletedStoryIndividualPage extends React.Component {
     editTitle(e) {
         e.preventDefault();
         const but = document.querySelector('#editTitle');
-        if(but.value=='edit') {
+        if(but.value=='edit title') {
             but.value = 'save';
             document.querySelector('#title').contentEditable = true;
         } else{
-            but.value = 'edit';
+            but.value = 'edit title';
             axios.post('/edittitle', {title: document.querySelector('#title').innerText, _id: this.state.story._id})
             .then(res=>{
                 console.log("EDITED!");
