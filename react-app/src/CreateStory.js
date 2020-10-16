@@ -35,6 +35,7 @@ const theme = createMuiTheme({
       this.state = {storyLength: null, firstWord: '', frequency: ''}
     }
     createStory(e) {
+        console.log(this.state.frequency.value)
         e.preventDefault();
         const inputs = document.querySelectorAll('.storyInput');
         if(this.valid()) { //validates data and sends alert if data is invalid
@@ -44,7 +45,7 @@ const theme = createMuiTheme({
                     author: json.user,
                     storylength: this.state.storyLength,
                     storyfirstword: this.state.firstWord.trim(),
-                    skip: this.state.frequency.value,
+                    skip: this.state.frequency,
                     storyType: document.querySelector('input[name="storyType"]:checked').value
                 })
                 .then(response => {
