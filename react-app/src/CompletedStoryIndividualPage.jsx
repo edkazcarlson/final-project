@@ -79,7 +79,7 @@ export default class CompletedStoryIndividualPage extends React.Component {
                 <Paper style={{height: 400, width: 400, padding: theme.spacing(2), display: 'flex', flexDirection: "column", flexWrap: "wrap"}}>
                     <div>
                          <h1 className="title" id="title" style = {{textAlign: 'center', color: 'white'}}>{this.state.story.title}</h1>{this.state.isAuthor?
-                         <Button id="editTitle" variant="contained" onClick = {this.editTitle.bind(this)}>edit</Button>:null}
+                         <Button id="editTitle" variant="contained" onClick = {this.editTitle.bind(this)}>edit title</Button>:null}
                          <p style = {{color: 'white'}}>{this.state.story.listofwords.join(' ') + '.'}</p>
                     </div>
                     <div style = {{marginRight: '10px'}}>
