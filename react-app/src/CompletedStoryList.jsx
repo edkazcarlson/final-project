@@ -11,7 +11,7 @@ const theme = createMuiTheme({
         main: "#7e57c2", //purple
       },
       secondary: {
-        main: '#76ff03', //green
+        main: '#ba68c8', //green
       },
     },
   });
@@ -49,10 +49,10 @@ export default class CompletedStoryList extends React.Component {
 
     render() {
         return (<ThemeProvider theme={theme}>
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center"}}>
-            <h1 className="title">Previous Stories</h1>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", flexWrap: "wrap"}}>
+            <h1 className="title">Completed Stories</h1>
             {this.state.demoStories.map((story) => {
-                return (<Paper style={{margin: theme.spacing(1), padding: theme.spacing(2), height: 150, width: 300}} onClick={() => this.click(story._id)}>
+                return (<Paper style={{margin: theme.spacing(1), padding: theme.spacing(2), width: 400}} onClick={() => this.click(story._id)}>
                     <div style={{ cursor: 'pointer' }}>
                         <div className="subtitle">{story.title}</div>
                         <div className="lowPriority">{`${story.votes} VOTES`}</div>

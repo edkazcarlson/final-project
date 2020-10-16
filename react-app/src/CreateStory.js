@@ -24,7 +24,7 @@ const theme = createMuiTheme({
         main: "#7e57c2", //purple
       },
       secondary: {
-        main: '#76ff03', //green
+        main: '#ba68c8', //green
       },
     },
   });
@@ -105,7 +105,7 @@ const theme = createMuiTheme({
               </FormControl><br/>
               <Button style = {{fontSize: '16px'}} variant="contained" onClick = {(e) => {this.createStory(e)}}>Create Story</Button><br/>
           </form><br/>
-          <a href="/">Return to homepage</a>
+          <a style={{color: '#ba68c8'}} className="content" href="/">Return to homepage</a>
         </div>
         </ThemeProvider>
       );

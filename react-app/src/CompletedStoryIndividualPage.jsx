@@ -17,7 +17,7 @@ const theme = createMuiTheme({
         main: "#7e57c2", //purple
       },
       secondary: {
-        main: '#76ff03', //green
+        main: '#ba68c8', //green
       },
     },
   });
@@ -76,20 +76,20 @@ export default class CompletedStoryIndividualPage extends React.Component {
             return (
                 <div style={{display:"flex", alignItems: "center", justifyContent: "center"}}>
                 <ThemeProvider theme={theme}>
-                <Paper style={{height: 400, width: 400, padding: theme.spacing(2), display: 'flex', flexDirection: "column", flexWrap: "wrap"}}>
+                <Paper style={{width: 400, padding: theme.spacing(2), display: 'flex', flexDirection: "column", flexWrap: "wrap"}}>
                     <div>
                          <h1 className="title" id="title" style = {{textAlign: 'center', color: 'white'}}>{this.state.story.title}</h1>{this.state.isAuthor?
                          <Button id="editTitle" variant="contained" onClick = {this.editTitle.bind(this)}>edit</Button>:null}
                          <p style = {{color: 'white'}}>{this.state.story.listofwords.join(' ') + '.'}</p>
                     </div>
                     <div style = {{marginRight: '10px'}}>
-                        <ThumbUpIcon style = {{color: this.state.chosenVote === 1 ? theme.palette.primary.main : 'white'}} onClick={() => this.setVote(1)}/>
-                        <ThumbDownIcon style = {{color: this.state.chosenVote === -1 ? theme.palette.primary.main : 'white'}} onClick={() => this.setVote(-1)}/>
+                        <ThumbUpIcon style = {{color: this.state.chosenVote === 1 ? theme.palette.secondary.main : 'white'}} onClick={() => this.setVote(1)}/>
+                        <ThumbDownIcon style = {{color: this.state.chosenVote === -1 ? theme.palette.secondary.main : 'white'}} onClick={() => this.setVote(-1)}/>
                         <p className="lowPriority">Points: {this.getVotes(this.state.story.votes)}</p>
                         <p className="lowPriority">Author: {this.state.story.contributors[0]}</p>
                         <p className="lowPriority">Story Type: {this.state.story.storyType}</p>
-                        <em className="lowPriority">FINISHED {d.toLocaleDateString()} AT {d.toLocaleTimeString()} </em> <br/>
-                        <em className="lowPriority">TOOK {Math.floor(dur / 3600000)} HOUR{(Math.floor(dur / 3600000) == 1) ? "" : "S"} AND {Math.floor(dur / 60000) % 60} MINUTE{(Math.floor(dur / 60000) % 60 == 1) ? "" : "S"} TO COMPLETE</em>
+                        <em className="lowPriority">Finished {d.toLocaleDateString()} at {d.toLocaleTimeString()} </em> <br/>
+                        <em className="lowPriority">Took {Math.floor(dur / 3600000)} hour{(Math.floor(dur / 3600000) == 1) ? "" : "s"} and {Math.floor(dur / 60000) % 60} minute{(Math.floor(dur / 60000) % 60 == 1) ? "" : "s"} to complete.</em>
                     </div>
                 </Paper>
                 </ThemeProvider>

@@ -13,7 +13,7 @@ const theme = createMuiTheme({
         main: "#7e57c2", //purple
       },
       secondary: {
-        main: '#76ff03', //green
+        main: '#ba68c8', //green
       },
     },
   });
@@ -157,8 +157,8 @@ export class Login extends Component {
 
                         {this.props.isLogin ? (<div>
                         <p className="lowPriority">DON'T HAVE AN ACCOUNT?</p>
-                        <a href="/register">
-                            <p className="subtitle">
+                        <a style={{color: '#ba68c8'}} href="/register">
+                            <p className="content">
                                 Sign Up
                             </p>
 
