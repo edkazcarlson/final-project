@@ -6,7 +6,6 @@ import CreateStory from './CreateStory'
 import TopBar from './TopBar'
 import CompletedStoryList from './CompletedStoryList'
 import CompletedStoryIndividualPage from './CompletedStoryIndividualPage';
-import InProgressStory from './InProgressStory';
 import Login from './Login'
 import CurrentStory from './CurrentStory'
 
@@ -43,10 +42,7 @@ export default class App extends React.Component {
         </Route>
         <Route path='/contribute'>
          <CurrentStory/>
-        </Route>  
-        <Route path='/inProgressStory'>
-          <InProgressStory/>
-        </Route>
+        </Route> 
         <Route path='/completedStories'>
           <CompletedStoryList
           setCurrentStory = {this.setCurrentStory}

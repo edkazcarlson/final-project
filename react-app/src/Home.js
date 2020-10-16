@@ -31,12 +31,6 @@ export default class Home extends React.Component {
             
         })
     }
-
-    jumpToStory(id){
-      this.props.setCurrentInProgressStory(id);
-      window.open('/inProgressStory', "_self");
-    }
-
     test() {
       axios.get('/del')
     }

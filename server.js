@@ -249,11 +249,6 @@ app.get("/completeStory", (request, response) => {
   response.sendFile(__dirname + "/react-app/build/index.html");
 });
 
-app.get("/inProgressStory", (request, response) => {
-  // response.json({request.body.id})
-  response.sendFile(__dirname + "/react-app/build/index.html");
-});
-
 app.get("/contribute", (request, response) => {
   loginLimitedRoute(request, response)
 });
