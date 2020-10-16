@@ -123,7 +123,7 @@ export default class CurrentStory extends React.Component {
     render() {
         let skipTry = 0;
         if(yarray !== undefined) {
-            skipTry = (yarray !== undefined) ? this.state.skip - (yarray.length - yarray.toArray().map(a => a.user).lastIndexOf(currentUser) - 1): 0;
+            skipTry = (yarray.toArray().map(a => a.user).lastIndexOf(currentUser) === -1) ? 0 : this.state.skip - (yarray.length - yarray.toArray().map(a => a.user).lastIndexOf(currentUser) - 1);
             console.log("Length", yarray.length)
             console.log("last index", yarray.toArray().map(a => a.user).lastIndexOf(currentUser))
             console.log("Skip: ", this.state.skip)
@@ -156,7 +156,7 @@ export default class CurrentStory extends React.Component {
 
     enoughEntries() {
         //needs to cycle through current contributor list and see how many non-current users are at the end of the list
-        let posValue = this.state.skip - (yarray.length - yarray.toArray().map(a => a.user).lastIndexOf(currentUser) - 1);
+        let posValue = (yarray.toArray().map(a => a.user).lastIndexOf(currentUser) === -1) ? 0 : this.state.skip - (yarray.length - yarray.toArray().map(a => a.user).lastIndexOf(currentUser) - 1);
         console.log("Length", yarray.length)
         console.log("last index", yarray.toArray().map(a => a.user).lastIndexOf(currentUser))
         console.log(this.state.skip)
