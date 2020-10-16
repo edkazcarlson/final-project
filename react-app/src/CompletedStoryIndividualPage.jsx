@@ -12,6 +12,7 @@ export default class CompletedStoryIndividualPage extends React.Component {
         this.state = {
             story: null,
             chosenVote: null,
+            isAuthor: false,
         };
     }
 
@@ -27,12 +28,17 @@ export default class CompletedStoryIndividualPage extends React.Component {
                 that.setState({
                     story: response.data.story
                 });
-                fetch("/currentUser").then(function (response) {
-                    return response.json()
+                fetch("/currentUser").then(function (res) {
+                    return res.json()
                 }).then((json) => {
                     return json.user
                 })
                     .then((id) => {
+                        if(id==response.data.story.contributors[0]){
+                            that.setState({
+                                isAuthor:true
+                            })
+                        }
                         response.data.story.votes.forEach((ele) => {
                             if (ele.id === id) {
                                 that.setState({chosenVote: ele.value});
@@ -62,13 +68,29 @@ export default class CompletedStoryIndividualPage extends React.Component {
                         <em>Took {Math.floor(dur / 3600000)} hour{(Math.floor(dur / 3600000) == 1) ? "" : "s"} and {Math.floor(dur / 60000) % 60} minute{(Math.floor(dur / 60000) % 60 == 1) ? "" : "s"} to finish</em>
                     </div>
                     <div>
-                        <h2 style = {{textAlign: 'center'}}>{this.state.story.title}</h2>
+            <h2 id="title" style = {{textAlign: 'center'}}>{this.state.story.title}</h2>{this.state.isAuthor?<input value="edit" id="editTitle" type="submit" onClick={this.editTitle.bind(this)}/>:null}
                         <p>{this.state.story.listofwords.join(' ') + '.'}</p>
                     </div>
                 </div>
             )
         }
         return null;
+    }
+
+    editTitle(e) {
+        e.preventDefault();
+        const but = document.querySelector('#editTitle');
+        if(but.value=='edit') {
+            but.value = 'save';
+            document.querySelector('#title').contentEditable = true;
+        } else{
+            but.value = 'edit';
+            axios.post('/edittitle', {title: document.querySelector('#title').innerText, _id: this.state.story._id})
+            .then(res=>{
+                console.log("EDITED!");
+            })
+            document.querySelector('#title').contentEditable = false;
+        }
     }
 
     setVote(vote) {
