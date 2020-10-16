@@ -79,7 +79,7 @@ export default class CompletedStoryIndividualPage extends React.Component {
                 <Paper style={{minHeight: 400, minWidth: 400, padding: theme.spacing(2), display: 'flex', flexDirection: "column", flexWrap: "wrap"}}>
                     <div>
                          <h1 className="title" id="title" style = {{textAlign: 'center', color: 'white'}}>{this.state.story.title}</h1>{this.state.isAuthor?
-                         <Button id="editTitle" variant="contained" onClick = {this.editTitle.bind(this)}>edit</Button>:null}
+                         <Button id="editTitle" variant="contained" onClick = {this.editTitle.bind(this)}>edit title</Button>:null}
                          <p style = {{color: 'white'}}>{this.state.story.listofwords.join(' ') + '.'}</p>
                     </div>
                     <div style = {{marginRight: '10px'}}>
@@ -103,11 +103,11 @@ export default class CompletedStoryIndividualPage extends React.Component {
     editTitle(e) {
         e.preventDefault();
         const but = document.querySelector('#editTitle');
-        if(but.value=='edit') {
+        if(but.value=='edit title') {
             but.value = 'save';
             document.querySelector('#title').contentEditable = true;
         } else{
-            but.value = 'edit';
+            but.value = 'edit title';
             axios.post('/edittitle', {title: document.querySelector('#title').innerText, _id: this.state.story._id})
             .then(res=>{
                 console.log("EDITED!");
