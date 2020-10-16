@@ -102,11 +102,11 @@ export default class CompletedStoryIndividualPage extends React.Component {
     editTitle(e) {
         e.preventDefault();
         const but = document.querySelector('#editTitle');
-        if(but.value=='edit') {
+        if(but.value=='edit title') {
             but.value = 'save';
             document.querySelector('#title').contentEditable = true;
         } else{
-            but.value = 'edit';
+            but.value = 'edit title';
             axios.post('/edittitle', {title: document.querySelector('#title').innerText, _id: this.state.story._id})
             .then(res=>{
                 console.log("EDITED!");
