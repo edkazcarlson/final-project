@@ -1,7 +1,6 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
 
-
 export default function TopBar(props){
   let links = [{name: 'Home Page', url: '/'}
   ,{name: 'Browse Completed Stories', url: '/completedStories'}
@@ -27,10 +26,17 @@ export default function TopBar(props){
     })
   }
 
-  function jumpToPage(url){
-    window.open(url, "_self");
-  }
+    function logOut() {
+        fetch('/logOut', {
+            method: 'POST'
+        }).then(() => {
+            window.open('/', "_self");
+        })
+    }
 
+    function jumpToPage(url) {
+        window.open(url, "_self");
+    }
 
   return (
     <div className="TopBar" style = {{marginBottom: '10px', display: 'flex', justifyContent: 'space-between'}}>

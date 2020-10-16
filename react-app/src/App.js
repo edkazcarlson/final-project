@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import {BrowserRouter as Router, Route} from 'react-router-dom';
 import Home from './Home'
 import CreateStory from './CreateStory'
 import TopBar from './TopBar'
@@ -52,8 +52,7 @@ export default class App extends React.Component {
           <CompletedStoryIndividualPage
           id = {this.state.currentStoryID}/>
         </Route>
-
-    </Router>
-    );
+    </Router>)
   }
+
 }

@@ -17,42 +17,51 @@ export default class Home extends React.Component {
             currentStoryStatus: {},
         };
     }
+
     componentDidMount() {
-        axios.get('/getcurstory' )
-        .then(response => {
-            if(response.data.status==='nostory') {
-                console.log("NO STORY!");
-                //we gotta handle that condition here
-            } else {
-                this.setState({
-                    currentStory:{}
-                });
-            }
-            
-        })
+        axios.get('/getcurstory')
+            .then(response => {
+                if (response.data.status === 'nostory') {
+                    console.log("NO STORY!");
+                    //we gotta handle that condition here
+                } else {
+                    this.setState({
+                        currentStory: {}
+                    });
+                }
+
+            })
     }
+
+
+    jumpToStory(id) {
+        this.props.setCurrentInProgressStory(id);
+        window.open('/inProgressStory', "_self");
+    }
+
     test() {
-      axios.get('/del')
+        axios.get('/del')
     }
-  render() {
-    return (
-      <div className="App">
-      <h1>One Word Story</h1>
-      <br/>
-      <a href="/contribute">Contribute</a>
-      <br/>
-      <button onClick={this.test}>Reset db (for testing purposes)</button>
-      {/* {this.getStories().length === 0 ?
+
+    render() {
+        return (
+            <div className="App">
+                <h1>One Word Story</h1>
+                <br/>
+                <a href="/contribute">Contribute</a>
+                <br/>
+                <button onClick={this.test}>Reset db (for testing purposes)</button>
+                {/* {this.getStories().length === 0 ?
          <CreateStory/>: this.getStories().map((story) =>{
           return(<div onClick = {() => {this.jumpToStory(story.id)}}>
             <b>{story.title}</b> written by {story.op}
           </div>
          )}) } */}
-         <div>
-         Icon made by icon king from www.freeicons.io
-         </div>
-         
-        </div>
-    );
-  }
+                <div>
+                    Icon made by icon king from www.freeicons.io
+                </div>
+
+            </div>
+        );
+    }
 }
