@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
-import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import {createMuiTheme, ThemeProvider} from '@material-ui/core/styles';
 import * as Y from 'yjs'
 import {WebrtcProvider} from 'y-webrtc'
 import {WebsocketProvider} from 'y-websocket'
@@ -14,15 +14,15 @@ let currentUser
 const theme = createMuiTheme({
     spacing: 8,
     palette: {
-      type: 'dark',
-      primary: {
-        main: "#7e57c2", //purple
-      },
-      secondary: {
-        main: '#ba68c8', //green
-      },
+        type: 'dark',
+        primary: {
+            main: "#7e57c2", //purple
+        },
+        secondary: {
+            main: '#ba68c8', //green
+        },
     },
-  });
+});
 
 /*
 TODO:
@@ -101,7 +101,7 @@ export default class CurrentStory extends React.Component {
 
     addWord(e) {
         e.preventDefault();
-        const nextword = document.querySelector('#nextword').value;
+        const nextword = document.querySelector('#nextword').value.trim();
         if (nextword.split(' ').length > 1 && this.state.isWordType) {
             alert('Cannot upload multiple words for this story');
         } else if (!this.enoughEntries()) {
@@ -114,15 +114,15 @@ export default class CurrentStory extends React.Component {
                 'word': nextword,
                 'contributors': yarray.toArray().map(a => a.user)
             })
-            .then(response => {
-                console.log("Pushed new word to database")
-            })
+                .then(response => {
+                    console.log("Pushed new word to database")
+                })
         }
     }
 
     render() {
         let skipTry = 0;
-        if(yarray !== undefined) {
+        if (yarray !== undefined) {
             skipTry = (yarray.toArray().map(a => a.user).lastIndexOf(currentUser) === -1) ? 0 : this.state.skip - (yarray.length - yarray.toArray().map(a => a.user).lastIndexOf(currentUser) - 1);
             console.log("Length", yarray.length)
             console.log("last index", yarray.toArray().map(a => a.user).lastIndexOf(currentUser))
@@ -133,22 +133,25 @@ export default class CurrentStory extends React.Component {
             <div>
                 <h1 className="title">{this.state.title}</h1>
                 <ThemeProvider theme={theme}>
-                <div className="subtitle">
-                    {this.state.listOfWords.map(word => (
-                        <span>{word} </span>
-                    ))}
-                    <br/>
-                    <form>
-                        <TextField style={{margin: theme.spacing(1)}} id="nextword"
-                            label="Next input" type="text" placeholder="enter a word or phrase"
-                            variant="filled" margin="normal" InputLabelProps={{shrink: true}}
+                    <div className="subtitle">
+                        {this.state.listOfWords.map(word => (
+                            <span>{word} </span>
+                        ))}
+                        <br/>
+                        <form>
+                            <TextField style={{margin: theme.spacing(1)}} id="nextword"
+                                       label="Next input" type="text" placeholder="enter a word or phrase"
+                                       variant="filled" margin="normal" InputLabelProps={{shrink: true}}
                             />
-                        <input style = {{visibility: 'hidden', height: '0px', width: '0px'}}type="submit" onClick={this.addWord.bind(this)}/>
-                    </form>
-                    <br/>
-                    <h3>{(yarray !== undefined) ? ((skipTry < 0) ? 0 : skipTry) : ""} more users must contribute before you can.</h3>
-                    <h2 className="lowPriority">THERE ARE {this.state.maxWords - this.state.curWordCount} {this.state.isWordType ? 'WORDS' : 'PHRASES'} REMAINING.</h2>
-                </div>
+                            <input style={{visibility: 'hidden', height: '0px', width: '0px'}} type="submit"
+                                   onClick={this.addWord.bind(this)}/>
+                        </form>
+                        <br/>
+                        <h3>{(yarray !== undefined) ? ((skipTry < 0) ? 0 : skipTry) : ""} more users must contribute
+                            before you can.</h3>
+                        <h2 className="lowPriority">THERE
+                            ARE {this.state.maxWords - this.state.curWordCount} {this.state.isWordType ? 'WORDS' : 'PHRASES'} REMAINING.</h2>
+                    </div>
                 </ThemeProvider>
             </div>
         );

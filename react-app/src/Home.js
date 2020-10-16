@@ -46,7 +46,12 @@ export default class Home extends React.Component {
 
     render() {
         return (
-            <div className="App" style={{display: 'flex', flexDirection: "column", justifyContent: 'space-around', alignItems: 'center'}}>
+            <div className="App" style={{
+                display: 'flex',
+                flexDirection: "column",
+                justifyContent: 'space-around',
+                alignItems: 'center'
+            }}>
                 <h1 className="title">One Word Story</h1>
                 <br/>
                 <a style={{color: '#ba68c8'}} className="content" href="/contribute">Contribute</a>

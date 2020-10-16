@@ -41,13 +41,13 @@ passport.deserializeUser(function (obj, done) {
     done(null, obj);
 });
 
-function loginLimitedRoute(request, response){
-  let username = request.session['User'];
-  if (username == null){
-    response.redirect('/login');
-  } else {
-    response.sendFile(__dirname + "/react-app/build/index.html");
-  }
+function loginLimitedRoute(request, response) {
+    let username = request.session['User'];
+    if (username == null) {
+        response.redirect('/login');
+    } else {
+        response.sendFile(__dirname + "/react-app/build/index.html");
+    }
 }
 
 app.use(cookieSession({
@@ -63,7 +63,9 @@ console.log("starting to connect...");
 client.connect(err => {
     console.log("connected!");
     stories = client.db("data").collection("teststories");
-    stories.find({ }).toArray().then((res) => {console.log(res)})
+    stories.find({}).toArray().then((res) => {
+        console.log(res)
+    })
     // stories.find({ }).toArray().then((res) => {console.log(res)})
 });
 let users = null;
@@ -87,7 +89,8 @@ function setSessionUser(req, username, password) {
 
 app.get('/auth/github',
     passport.authenticate('github', {scope: ['user:email']}),
-    function (req, res) {});
+    function (req, res) {
+    });
 
 app.get('/auth/github/callback',
     passport.authenticate('github', {failureRedirect: '/login'}),
@@ -140,12 +143,20 @@ app.get('/getcurstory', (req, res) => {
 })
 //adds word to story
 app.post('/addword', bodyParser.json(), (req, res) => {
-    stories.updateOne({_id: mongodb.ObjectID(req.body.id)}, {$push: {listofwords: req.body.word}, $set: {contributors: req.body.contributors}})
+    stories.updateOne({_id: mongodb.ObjectID(req.body.id)}, {
+        $push: {listofwords: req.body.word},
+        $set: {contributors: req.body.contributors}
+    })
         .then(() => {
             stories.findOne({_id: mongodb.ObjectID(req.body.id)}, (err, result) => {
                 const isFilled = result.listofwords.length >= result.maxwords;
                 if (isFilled) {
-                    stories.updateOne({_id: mongodb.ObjectID(req.body.id)}, {$set: {finishedStory: true, timeEnd: Date.now()}})
+                    stories.updateOne({_id: mongodb.ObjectID(req.body.id)}, {
+                        $set: {
+                            finishedStory: true,
+                            timeEnd: Date.now()
+                        }
+                    })
                         .then(() => res.send({newword: req.body.word, isFilled}));
                 } else {
                     res.send({newword: req.body.word, isFilled});
@@ -155,11 +166,11 @@ app.post('/addword', bodyParser.json(), (req, res) => {
         })
 })
 //called when author wishes to edit story title
-app.post('/edittitle', bodyParser.json(), (req, res)=> {
+app.post('/edittitle', bodyParser.json(), (req, res) => {
     stories.updateOne({_id: mongodb.ObjectID(req.body._id)}, {$set: {title: req.body.title}})
-    .then(()=>{
-        res.send({status: 'success!'});
-    })
+        .then(() => {
+            res.send({status: 'success!'});
+        })
 })
 
 
@@ -190,8 +201,8 @@ app.post('/changeVote', bodyParser.json(), (req, response) => {
     stories.updateOne({_id: mongodb.ObjectId(req.body._id)}, {$set: {votes: req.body.votes}}, {upsert: false}, (err, res) => response.send(res));
 })
 
-app.get('/', (request, response) =>{
-  loginLimitedRoute(request, response)
+app.get('/', (request, response) => {
+    loginLimitedRoute(request, response)
 })
 
 
@@ -254,7 +265,7 @@ app.get("/login", (request, response) => {
 });
 app.get('/currentUser', (request, response) => {
     console.log(`user to return in currentuser: ${request.session['User']}`)
-    response.json({user: request.session['User'] == undefined ? null: request.session['User']})
+    response.json({user: request.session['User'] == undefined ? null : request.session['User']})
 });
 app.get("/register", (request, response) => {
     response.sendFile(__dirname + "/react-app/build/index.html");
@@ -263,7 +274,7 @@ app.get("/completedStories", (request, response) => {
     response.sendFile(__dirname + "/react-app/build/index.html");
 });
 app.get("/CreateStory", (request, response) => {
-  loginLimitedRoute(request, response)
+    loginLimitedRoute(request, response)
 });
 
 app.get("/completeStory", (request, response) => {
@@ -272,7 +283,7 @@ app.get("/completeStory", (request, response) => {
 });
 
 app.get("/contribute", (request, response) => {
-  loginLimitedRoute(request, response)
+    loginLimitedRoute(request, response)
 });
 
 
