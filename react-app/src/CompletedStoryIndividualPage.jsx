@@ -76,7 +76,7 @@ export default class CompletedStoryIndividualPage extends React.Component {
             return (
                 <div style={{display:"flex", alignItems: "center", justifyContent: "center"}}>
                 <ThemeProvider theme={theme}>
-                <Paper style={{height: 400, width: 400, padding: theme.spacing(2), display: 'flex', flexDirection: "column", flexWrap: "wrap"}}>
+                <Paper style={{minHeight: 400, minWidth: 400, padding: theme.spacing(2), display: 'flex', flexDirection: "column", flexWrap: "wrap"}}>
                     <div>
                          <h1 className="title" id="title" style = {{textAlign: 'center', color: 'white'}}>{this.state.story.title}</h1>{this.state.isAuthor?
                          <Button id="editTitle" variant="contained" onClick = {this.editTitle.bind(this)}>edit</Button>:null}
@@ -88,8 +88,9 @@ export default class CompletedStoryIndividualPage extends React.Component {
                         <p className="lowPriority">Points: {this.getVotes(this.state.story.votes)}</p>
                         <p className="lowPriority">Author: {this.state.story.contributors[0]}</p>
                         <p className="lowPriority">Story Type: {this.state.story.storyType}</p>
-                        <em className="lowPriority">FINISHED {d.toLocaleDateString()} AT {d.toLocaleTimeString()} </em> <br/>
-                        <em className="lowPriority">TOOK {Math.floor(dur / 3600000)} HOUR{(Math.floor(dur / 3600000) == 1) ? "" : "S"} AND {Math.floor(dur / 60000) % 60} MINUTE{(Math.floor(dur / 60000) % 60 == 1) ? "" : "S"} TO COMPLETE</em>
+                        <em className="lowPriority">Finished {d.toLocaleDateString()} at {d.toLocaleTimeString()} </em> <br/>
+                         <em className="lowPriority">Took 
+                         {Math.floor(dur / 3600000) > 0 ? (Math.floor(dur / 3600000) + 'hour' + ((Math.floor(dur / 3600000) == 1) ? "" : "s")): ''} {Math.floor(dur / 60000) % 60} minute{(Math.floor(dur / 60000) % 60 == 1) ? "" : "s"} to complete.</em>
                     </div>
                 </Paper>
                 </ThemeProvider>
