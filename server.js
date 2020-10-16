@@ -137,7 +137,7 @@ app.get('/getcurstory', (req, res) => {
 })
 //adds word to story
 app.post('/addword', bodyParser.json(), (req, res) => {
-    stories.updateOne({_id: mongodb.ObjectID(req.body.id)}, {$push: {listofwords: req.body.word}})
+    stories.updateOne({_id: mongodb.ObjectID(req.body.id)}, {$push: {listofwords: req.body.word}, $set: {contributors: req.body.contributors}})
         .then(() => {
             stories.findOne({_id: mongodb.ObjectID(req.body.id)}, (err, result) => {
                 const isFilled = result.listofwords.length >= result.maxwords;
