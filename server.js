@@ -137,7 +137,7 @@ app.get('/getcurstory', (req, res) => {
 })
 //adds word to story
 app.post('/addword', bodyParser.json(), (req, res) => {
-    stories.updateOne({_id: mongodb.ObjectID(req.body.id)}, {$push: {listofwords: req.body.word}})
+    stories.updateOne({_id: mongodb.ObjectID(req.body.id)}, {$push: {listofwords: req.body.word}, $set: {contributors: req.body.contributors}})
         .then(() => {
             stories.findOne({_id: mongodb.ObjectID(req.body.id)}, (err, result) => {
                 const isFilled = result.listofwords.length >= result.maxwords;
@@ -242,7 +242,8 @@ app.get("/login", (request, response) => {
     response.sendFile(__dirname + "/react-app/build/index.html");
 });
 app.get('/currentUser', (request, response) => {
-    response.json({user: request.session['User']})
+    console.log(`user to return in currentuser: ${request.session['User']}`)
+    response.json({user: request.session['User'] == undefined ? null: request.session['User']})
 });
 app.get("/register", (request, response) => {
     response.sendFile(__dirname + "/react-app/build/index.html");
