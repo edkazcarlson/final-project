@@ -242,7 +242,8 @@ app.get("/login", (request, response) => {
     response.sendFile(__dirname + "/react-app/build/index.html");
 });
 app.get('/currentUser', (request, response) => {
-    response.json({user: request.session['User']})
+    console.log(`user to return in currentuser: ${request.session['User']}`)
+    response.json({user: request.session['User'] == undefined ? null: request.session['User']})
 });
 app.get("/register", (request, response) => {
     response.sendFile(__dirname + "/react-app/build/index.html");
