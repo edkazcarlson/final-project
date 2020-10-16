@@ -130,7 +130,7 @@ export default class CurrentStory extends React.Component {
             console.log("skipTry: ", skipTry);
         }
         return (
-            <div>
+            <div style={{display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center"}}>
                 <h1 className="title">{this.state.title}</h1>
                 <ThemeProvider theme={theme}>
                     <div className="subtitle">
@@ -143,15 +143,12 @@ export default class CurrentStory extends React.Component {
                                        label="Next input" type="text" placeholder="enter a word or phrase"
                                        variant="filled" margin="normal" InputLabelProps={{shrink: true}}
                             />
-                            <input style={{visibility: 'hidden', height: '0px', width: '0px'}} type="submit"
-                                   onClick={this.addWord.bind(this)}/>
-                        </form>
-                        <br/>
-                        <h3>{(yarray !== undefined) ? ((skipTry < 0) ? 0 : skipTry) : ""} more users must contribute
-                            before you can.</h3>
-                        <h2 className="lowPriority">THERE
-                            ARE {this.state.maxWords - this.state.curWordCount} {this.state.isWordType ? 'WORDS' : 'PHRASES'} REMAINING.</h2>
-                    </div>
+                        <input style = {{visibility: 'hidden', height: '0px', width: '0px'}}type="submit" onClick={this.addWord.bind(this)}/>
+                    </form>
+                    <br/>
+                    <h2 className="content">{(yarray !== undefined) ? ((skipTry < 0) ? 0 : skipTry) : ""} more users must contribute before you can.</h2>
+                    <h2 className="lowPriority">THERE ARE {this.state.maxWords - this.state.curWordCount} {this.state.isWordType ? 'WORDS' : 'PHRASES'} REMAINING.</h2>
+                </div>
                 </ThemeProvider>
             </div>
         );
