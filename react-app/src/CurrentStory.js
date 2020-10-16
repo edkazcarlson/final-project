@@ -96,7 +96,7 @@ export default class CurrentStory extends React.Component {
                     ))}
                     <br/>
                     <form>
-                        <label for="nextword">Next {this.state.isWordType ? "Word" : "Phrase"}: </label><input
+                        <label htmlFor="nextword">Next {this.state.isWordType ? "Word" : "Phrase"}: </label><input
                         id="nextword" name="nextword"/>
                         <input type="submit" onClick={this.addWord.bind(this)}/>
 

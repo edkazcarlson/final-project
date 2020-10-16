@@ -43,6 +43,7 @@ export default function TopBar(props){
       <div >
         {links.map(function(link){
           return (<Button 
+            key = {link.name}
             style = {{fontSize: '16px'}} 
             onClick = {() => {jumpToPage(link.url)}}
             variant="contained">{link.name}</Button>)
