@@ -2,6 +2,7 @@ import React from 'react'
 import axios from "axios"
 import {IndexeddbPersistence} from "y-indexeddb";
 import * as Y from "yjs";
+import './App.css';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 
@@ -12,6 +13,7 @@ export default class CompletedStoryIndividualPage extends React.Component {
         this.state = {
             story: null,
             chosenVote: null,
+            isAuthor: false,
         };
     }
 
@@ -27,12 +29,17 @@ export default class CompletedStoryIndividualPage extends React.Component {
                 that.setState({
                     story: response.data.story
                 });
-                fetch("/currentUser").then(function (response) {
-                    return response.json()
+                fetch("/currentUser").then(function (res) {
+                    return res.json()
                 }).then((json) => {
                     return json.user
                 })
                     .then((id) => {
+                        if(id==response.data.story.contributors[0]){
+                            that.setState({
+                                isAuthor:true
+                            })
+                        }
                         response.data.story.votes.forEach((ele) => {
                             if (ele.id === id) {
                                 that.setState({chosenVote: ele.value});
@@ -51,24 +58,40 @@ export default class CompletedStoryIndividualPage extends React.Component {
             console.log(this.state.story.timeEnd - this.state.story.timeStart)
             const dur = this.state.story.timeEnd - this.state.story.timeStart
             return (
-                <div style={{marginLeft: '10px', display: 'flex'}}>
+                <div style={{marginLeft: '10px', display: 'flex', color: 'white'}}>
                     <div style = {{marginRight: '10px'}}>
                         <ThumbUpIcon style = {{color: this.state.chosenVote === 1 ? 'red': 'black'}} onClick={() => this.setVote(1)}/>
                         <ThumbDownIcon style = {{color: this.state.chosenVote === -1 ? 'red': 'black'}} onClick={() => this.setVote(-1)}/>
-                        <p>Points: {this.getVotes(this.state.story.votes)}</p>
-                        <p>Author: {this.state.story.contributors[0]}</p>
-                        <p>Story Type: {this.state.story.storyType}</p>
-                        <em>Finished on {d.toLocaleDateString()} at {d.toLocaleTimeString()} </em> <br/>
-                        <em>Took {Math.floor(dur / 3600000)} hour{(Math.floor(dur / 3600000) == 1) ? "" : "s"} and {Math.floor(dur / 60000) % 60} minute{(Math.floor(dur / 60000) % 60 == 1) ? "" : "s"} to finish</em>
+                        <p className="lowPriority">Points: {this.getVotes(this.state.story.votes)}</p>
+                        <p className="lowPriority">Author: {this.state.story.contributors[0]}</p>
+                        <p className="lowPriority">Story Type: {this.state.story.storyType}</p>
+                        <em className="lowPriority">Finished on {d.toLocaleDateString()} at {d.toLocaleTimeString()} </em> <br/>
+                        <em className="lowPriority">Took {Math.floor(dur / 3600000)} hour{(Math.floor(dur / 3600000) == 1) ? "" : "s"} and {Math.floor(dur / 60000) % 60} minute{(Math.floor(dur / 60000) % 60 == 1) ? "" : "s"} to finish</em>
                     </div>
                     <div>
-                        <h2 style = {{textAlign: 'center'}}>{this.state.story.title}</h2>
-                        <p>{this.state.story.listofwords.join(' ') + '.'}</p>
+            <h2 id="title" style = {{textAlign: 'center', color: 'white'}}>{this.state.story.title}</h2>{this.state.isAuthor?<input value="edit" id="editTitle" type="submit" onClick={this.editTitle.bind(this)}/>:null}
+            <p style = {{color: 'white'}}>{this.state.story.listofwords.join(' ') + '.'}</p>
                     </div>
                 </div>
             )
         }
         return null;
+    }
+
+    editTitle(e) {
+        e.preventDefault();
+        const but = document.querySelector('#editTitle');
+        if(but.value=='edit') {
+            but.value = 'save';
+            document.querySelector('#title').contentEditable = true;
+        } else{
+            but.value = 'edit';
+            axios.post('/edittitle', {title: document.querySelector('#title').innerText, _id: this.state.story._id})
+            .then(res=>{
+                console.log("EDITED!");
+            })
+            document.querySelector('#title').contentEditable = false;
+        }
     }
 
     setVote(vote) {

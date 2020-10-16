@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React from 'react';
-
+import TextField from '@material-ui/core/TextField';
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import * as Y from 'yjs'
 import {WebrtcProvider} from 'y-webrtc'
 import {WebsocketProvider} from 'y-websocket'
@@ -9,6 +10,19 @@ import {IndexeddbPersistence} from 'y-indexeddb'
 const ydoc = new Y.Doc()
 let yarray
 let currentUser
+
+const theme = createMuiTheme({
+    spacing: 8,
+    palette: {
+      type: 'dark',
+      primary: {
+        main: "#7e57c2", //purple
+      },
+      secondary: {
+        main: '#76ff03', //green
+      },
+    },
+  });
 
 /*
 TODO:
@@ -86,8 +100,8 @@ export default class CurrentStory extends React.Component {
     }
 
     addWord(e) {
-        const nextword = document.querySelector('#nextword').value;
         e.preventDefault();
+        const nextword = document.querySelector('#nextword').value;
         if (nextword.split(' ').length > 1 && this.state.isWordType) {
             alert('Cannot upload multiple words for this story');
         } else if (!this.enoughEntries()) {
@@ -117,23 +131,25 @@ export default class CurrentStory extends React.Component {
         }
         return (
             <div>
-                <h3>{this.state.title}</h3>
-                <div>
+                <h1 className="title">{this.state.title}</h1>
+                <ThemeProvider theme={theme}>
+                <div className="subtitle">
                     {this.state.listOfWords.map(word => (
                         <span>{word} </span>
                     ))}
                     <br/>
                     <form>
-                        <label htmlFor="nextword">Next {this.state.isWordType ? "Word" : "Phrase"}: </label><input
-                        id="nextword" name="nextword"/>
-                        <input type="submit" onClick={this.addWord.bind(this)}/>
-
+                        <TextField style={{margin: theme.spacing(1)}} id="nextword"
+                            label="Next input" type="text" placeholder="enter a word or phrase"
+                            variant="filled" margin="normal" InputLabelProps={{shrink: true}}
+                            />
+                        <input style = {{visibility: 'hidden', height: '0px', width: '0px'}}type="submit" onClick={this.addWord.bind(this)}/>
                     </form>
                     <br/>
                     <h3>{(yarray !== undefined) ? ((skipTry < 0) ? 0 : skipTry) : ""} more users must contribute before you can.</h3>
-                    <h4>There
-                        are {this.state.maxWords - this.state.curWordCount} {this.state.isWordType ? 'words' : 'phrases'} left!</h4>
+                    <h2 className="lowPriority">THERE ARE {this.state.maxWords - this.state.curWordCount} {this.state.isWordType ? 'WORDS' : 'PHRASES'} REMAINING</h2>
                 </div>
+                </ThemeProvider>
             </div>
         );
     }
