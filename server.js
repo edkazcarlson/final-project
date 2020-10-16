@@ -154,6 +154,14 @@ app.post('/addword', bodyParser.json(), (req, res) => {
             })
         })
 })
+//called when author wishes to edit story title
+app.post('/edittitle', bodyParser.json(), (req, res)=> {
+    stories.updateOne({_id: mongodb.ObjectID(req.body._id)}, {$set: {title: req.body.title}})
+    .then(()=>{
+        res.send({status: 'success!'});
+    })
+})
+
 
 //called when the user enters the finished stories page
 app.get('/getfinishedstories', (req, res) => {
