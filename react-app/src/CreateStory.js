@@ -54,7 +54,7 @@ const theme = createMuiTheme({
                         console.log('loaded data from indexed db: ' + response)
                     })
                     const yarray = ydoc.getArray(response.data._id);
-                    yarray.insert(0, [response.data.listofwords[0]]);
+                    yarray.insert(0, [{word: response.data.listofwords[0], user: json.user}]);
                     alert("Story created successfully!");
                 })
              })

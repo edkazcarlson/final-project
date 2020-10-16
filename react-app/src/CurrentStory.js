@@ -40,7 +40,8 @@ export default class CurrentStory extends React.Component {
             id: -1,
             curWordCount: 0,
             isWordType: null,
-            contributors: null
+            contributors: null,
+            skip: 0
         }
     }
 
@@ -74,7 +75,8 @@ export default class CurrentStory extends React.Component {
                         title: res.data.title,
                         id: res.data._id,
                         curWordCount: res.data.listofwords.length,
-                        contributors: res.data.contributors
+                        contributors: res.data.contributors,
+                        skip: res.data.skip
                     });
                 }
                 //called when yarray is modified
@@ -100,9 +102,10 @@ export default class CurrentStory extends React.Component {
     addWord(e) {
         e.preventDefault();
         const nextword = document.querySelector('#nextword').value;
-        
         if (nextword.split(' ').length > 1 && this.state.isWordType) {
             alert('Cannot upload multiple words for this story');
+        } else if (!this.enoughEntries()) {
+            alert("Wait your turn!");
         } else {
             yarray.push([{word: nextword, user: currentUser}]);
             document.querySelector('#nextword').value = '';
@@ -118,6 +121,14 @@ export default class CurrentStory extends React.Component {
     }
 
     render() {
+        let skipTry = 0;
+        if(yarray !== undefined) {
+            skipTry = (yarray !== undefined) ? this.state.skip - (yarray.length - yarray.toArray().map(a => a.user).lastIndexOf(currentUser) - 1): 0;
+            console.log("Length", yarray.length)
+            console.log("last index", yarray.toArray().map(a => a.user).lastIndexOf(currentUser))
+            console.log("Skip: ", this.state.skip)
+            console.log("skipTry: ", skipTry);
+        }
         return (
             <div>
                 <h1 className="title">{this.state.title}</h1>
@@ -128,17 +139,29 @@ export default class CurrentStory extends React.Component {
                     ))}
                     <br/>
                     <form>
-                        <TextField style={{margin: theme.spacing(1)}} id="nextword" 
-                            label="Next input" type="text" placeholder="enter a word or phrase" 
-                            variant="filled" margin="normal" InputLabelProps={{shrink: true}} 
+                        <TextField style={{margin: theme.spacing(1)}} id="nextword"
+                            label="Next input" type="text" placeholder="enter a word or phrase"
+                            variant="filled" margin="normal" InputLabelProps={{shrink: true}}
                             />
                         <input style = {{visibility: 'hidden', height: '0px', width: '0px'}}type="submit" onClick={this.addWord.bind(this)}/>
                     </form>
                     <br/>
+                    <h3>{(yarray !== undefined) ? ((skipTry < 0) ? 0 : skipTry) : ""} more users must contribute before you can.</h3>
                     <h2 className="lowPriority">THERE ARE {this.state.maxWords - this.state.curWordCount} {this.state.isWordType ? 'WORDS' : 'PHRASES'} REMAINING</h2>
                 </div>
                 </ThemeProvider>
             </div>
         );
+    }
+
+    enoughEntries() {
+        //needs to cycle through current contributor list and see how many non-current users are at the end of the list
+        let posValue = this.state.skip - (yarray.length - yarray.toArray().map(a => a.user).lastIndexOf(currentUser) - 1);
+        console.log("Length", yarray.length)
+        console.log("last index", yarray.toArray().map(a => a.user).lastIndexOf(currentUser))
+        console.log(this.state.skip)
+        console.log("posValue: ", posValue);
+        //return true if this value is array length or >= skip
+        return (posValue <= 0);
     }
 }
