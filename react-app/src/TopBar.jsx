@@ -1,5 +1,20 @@
 import React from 'react';
+import './App.css';
 import Button from '@material-ui/core/Button';
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+
+const theme = createMuiTheme({
+  spacing: 8,
+  palette: {
+    type: 'dark',
+    primary: {
+      main: "#7e57c2", //purple
+    },
+    secondary: {
+      main: '#76ff03', //green
+    },
+  },
+});
 
 export default function TopBar(props){
   let links = [{name: 'Home Page', url: '/'}
@@ -39,6 +54,7 @@ export default function TopBar(props){
     }
 
   return (
+    <ThemeProvider theme={theme}>
     <div className="TopBar" style = {{marginBottom: '10px', display: 'flex', justifyContent: 'space-between'}}>
       <div >
         {links.map(function(link){
@@ -52,5 +68,6 @@ export default function TopBar(props){
       <Button style = {{fontSize: '16px'}} variant="contained" onClick = {() => {jumpToPage('/login')}}>Log in</Button>}
       
     </div>
+    </ThemeProvider>
   );
 }

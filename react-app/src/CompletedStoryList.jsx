@@ -1,4 +1,5 @@
 import React from 'react'
+import './App.css';
 
 export default class CompletedStoryList extends React.Component {
 
@@ -35,11 +36,11 @@ export default class CompletedStoryList extends React.Component {
         return(<div>
                {this.state.demoStories.map((story) =>{
                    return (<div onClick={() => this.click(story._id)}>
-                            <div style = {{marginLeft: '10px', fontSize: '20px', display: 'flex', width: 'fit-content', cursor: 'pointer'}} >
+                            <div className="subtitle" style = {{marginLeft: '10px', fontSize: '20px', display: 'flex', width: 'fit-content', cursor: 'pointer'}} >
                             <b style = {{marginRight: '5px'}}>{`${story.votes}:`}</b>
-                            <div  style = {{color: 'blue'}}>{story.title}</div>
+                            <div className="title" style = {{color: 'blue'}}>{story.title}</div>
                         </div>
-                        <p style = {{marginLeft: '5px'}}>{this.getFirstWords(story.listofwords)}</p>
+                        <p className="content" style = {{marginLeft: '5px'}}>{this.getFirstWords(story.listofwords)}</p>
                        </div>)
                })}
             </div>)
