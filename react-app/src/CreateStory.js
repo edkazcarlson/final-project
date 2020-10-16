@@ -34,10 +34,37 @@ const theme = createMuiTheme({
       super(props)
       this.state = {storyLength: null, firstWord: '', frequency: ''}
     }
+    createStory(e) {
+        e.preventDefault();
+        const inputs = document.querySelectorAll('.storyInput');
+        if(this.valid()) { //validates data and sends alert if data is invalid
+            fetch("/currentUser").then(function(response) {return response.json()
+            }).then( (json) => {
+                axios.post('/addstory', {
+                    author: json.user,
+                    storylength: this.state.storyLength,
+                    storyfirstword: this.state.firstWord.trim(),
+                    skip: this.state.frequency.value,
+                    storyType: document.querySelector('input[name="storyType"]:checked').value
+                })
+                .then(response => {
+                    // this allows you to instantly get the (cached) documents data
+                    const indexeddbProvider = new IndexeddbPersistence(response.data._id, ydoc)
+                    indexeddbProvider.whenSynced.then(() => {
+                        console.log('loaded data from indexed db: ' + response)
+                    })
+                    const yarray = ydoc.getArray(response.data._id);
+                    yarray.insert(0, [response.data.listofwords[0]]);
+                    alert("Story created successfully!");
+                })
+             })
+        }
+     }
   
     setStoryLength(len){
       this.setState({storyLength: len.target.value})
     }
+
     setfirstWord(e){
       this.setState({firstWord: e.target.value})
     }
@@ -45,33 +72,6 @@ const theme = createMuiTheme({
       this.setState({frequency: e.target.value})
     }
   
-  
-    createStory(e) {
-      e.preventDefault();
-      const inputs = document.querySelectorAll('.storyInput');
-      if(this.valid()) { //validates data and sends alert if data is invalid
-          fetch("/currentUser").then(function(response) {return response.json()
-          }).then( (json) => {
-              axios.post('/addstory', {
-                  author: json.user,
-                  storylength: this.state.storyLength,
-                  storyfirstword: this.state.firstWord.trim(),
-                  skip: this.state.frequency.value,
-                  storyType: document.querySelector('input[name="storyType"]:checked').value
-              })
-              .then(response => {
-                  // this allows you to instantly get the (cached) documents data
-                  const indexeddbProvider = new IndexeddbPersistence(response.data._id, ydoc)
-                  indexeddbProvider.whenSynced.then(() => {
-                      console.log('loaded data from indexed db: ' + response)
-                  })
-                  const yarray = ydoc.getArray(response.data._id);
-                  yarray.insert(0, [response.data.listofwords[0]]);
-                  alert("Story created successfully!");
-              })
-           })
-      }
-   }
     render() {
       return (
       <ThemeProvider theme={theme}>
@@ -129,6 +129,4 @@ const theme = createMuiTheme({
       }
       return false;
     }
-  
-  }
-
+}
