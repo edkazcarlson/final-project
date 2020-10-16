@@ -26,7 +26,8 @@ export default class CurrentStory extends React.Component {
             id: -1,
             curWordCount: 0,
             isWordType: null,
-            contributors: null
+            contributors: null,
+            skip: 0
         }
     }
 
@@ -60,7 +61,8 @@ export default class CurrentStory extends React.Component {
                         title: res.data.title,
                         id: res.data._id,
                         curWordCount: res.data.listofwords.length,
-                        contributors: res.data.contributors
+                        contributors: res.data.contributors,
+                        skip: res.data.skip
                     });
                 }
                 //called when yarray is modified
@@ -88,6 +90,8 @@ export default class CurrentStory extends React.Component {
         e.preventDefault();
         if (nextword.split(' ').length > 1 && this.state.isWordType) {
             alert('Cannot upload multiple words for this story');
+        } else if (!this.enoughEntries()) {
+            alert("Wait your turn!");
         } else {
             yarray.push([{word: nextword, user: currentUser}]);
             document.querySelector('#nextword').value = '';
@@ -103,6 +107,14 @@ export default class CurrentStory extends React.Component {
     }
 
     render() {
+        let skipTry = 0;
+        if(yarray !== undefined) {
+            skipTry = (yarray !== undefined) ? this.state.skip - (yarray.length - yarray.toArray().map(a => a.user).lastIndexOf(currentUser) - 1): 0;
+            console.log("Length", yarray.length)
+            console.log("last index", yarray.toArray().map(a => a.user).lastIndexOf(currentUser))
+            console.log("Skip: ", this.state.skip)
+            console.log("skipTry: ", skipTry);
+        }
         return (
             <div>
                 <h3>{this.state.title}</h3>
@@ -118,10 +130,22 @@ export default class CurrentStory extends React.Component {
 
                     </form>
                     <br/>
+                    <h3>{(yarray !== undefined) ? ((skipTry < 0) ? 0 : skipTry) : ""} more users must contribute before you can.</h3>
                     <h4>There
                         are {this.state.maxWords - this.state.curWordCount} {this.state.isWordType ? 'words' : 'phrases'} left!</h4>
                 </div>
             </div>
         );
+    }
+
+    enoughEntries() {
+        //needs to cycle through current contributor list and see how many non-current users are at the end of the list
+        let posValue = this.state.skip - (yarray.length - yarray.toArray().map(a => a.user).lastIndexOf(currentUser) - 1);
+        console.log("Length", yarray.length)
+        console.log("last index", yarray.toArray().map(a => a.user).lastIndexOf(currentUser))
+        console.log(this.state.skip)
+        console.log("posValue: ", posValue);
+        //return true if this value is array length or >= skip
+        return (posValue <= 0);
     }
 }
