@@ -147,7 +147,7 @@ export default class CurrentStory extends React.Component {
                     </form>
                     <br/>
                     <h3>{(yarray !== undefined) ? ((skipTry < 0) ? 0 : skipTry) : ""} more users must contribute before you can.</h3>
-                    <h2 className="lowPriority">THERE ARE {this.state.maxWords - this.state.curWordCount} {this.state.isWordType ? 'WORDS' : 'PHRASES'} REMAINING</h2>
+                    <h2 className="lowPriority">THERE ARE {this.state.maxWords - this.state.curWordCount} {this.state.isWordType ? 'WORDS' : 'PHRASES'} REMAINING.</h2>
                 </div>
                 </ThemeProvider>
             </div>
