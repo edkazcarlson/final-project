@@ -98,8 +98,9 @@ export default class CurrentStory extends React.Component {
     }
 
     addWord(e) {
-        const nextword = document.querySelector('#nextword').value;
         e.preventDefault();
+        const nextword = document.querySelector('#nextword').value;
+        
         if (nextword.split(' ').length > 1 && this.state.isWordType) {
             alert('Cannot upload multiple words for this story');
         } else {
@@ -130,7 +131,8 @@ export default class CurrentStory extends React.Component {
                         <TextField style={{margin: theme.spacing(1)}} id="nextword" 
                             label="Next input" type="text" placeholder="enter a word or phrase" 
                             variant="filled" margin="normal" InputLabelProps={{shrink: true}} 
-                            onChange = {(event) => {this.addWord.bind(this)}}/>
+                            />
+                        <input style = {{visibility: 'hidden', height: '0px', width: '0px'}}type="submit" onClick={this.addWord.bind(this)}/>
                     </form>
                     <br/>
                     <h2 className="lowPriority">THERE ARE {this.state.maxWords - this.state.curWordCount} {this.state.isWordType ? 'WORDS' : 'PHRASES'} REMAINING</h2>

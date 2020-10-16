@@ -21,9 +21,9 @@ export class Login extends Component {
     constructor(props) {
         super(props);
         if (props.isLogin) {
-            this.buttonClick = this.login;
+            this.buttonClick = (e) => {this.login(e)};
         } else {
-            this.buttonClick = this.register;
+            this.buttonClick = (e) => {this.register(e)};
         }
 
         this.state = {username: "", password: ""}
@@ -31,11 +31,12 @@ export class Login extends Component {
 
     login(e) {
         console.log('login page button clicked')
+        console.log(this)
         // prevent default form action from being carried out
         e.preventDefault()
     
-        const username = this.username;
-        const pass = this.password;
+        const username = this.state.username;
+        const pass = this.state.password;
         let json = {
             username: username,
             password: pass
