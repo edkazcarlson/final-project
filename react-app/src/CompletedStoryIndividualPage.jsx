@@ -6,6 +6,7 @@ import './App.css';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import Paper from '@material-ui/core/Paper';
+import Button from '@material-ui/core/Button';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 
 const theme = createMuiTheme({
@@ -77,7 +78,8 @@ export default class CompletedStoryIndividualPage extends React.Component {
                 <ThemeProvider theme={theme}>
                 <Paper style={{height: 400, width: 400, padding: theme.spacing(2), display: 'flex', flexDirection: "column", flexWrap: "wrap"}}>
                     <div>
-                         <h1 className="title" id="title" style = {{textAlign: 'center', color: 'white'}}>{this.state.story.title}</h1>{this.state.isAuthor?<input value="edit" id="editTitle" type="submit" onClick={this.editTitle.bind(this)}/>:null}
+                         <h1 className="title" id="title" style = {{textAlign: 'center', color: 'white'}}>{this.state.story.title}</h1>{this.state.isAuthor?
+                         <Button id="editTitle" variant="contained" onClick = {this.editTitle.bind(this)}>edit</Button>:null}
                          <p style = {{color: 'white'}}>{this.state.story.listofwords.join(' ') + '.'}</p>
                     </div>
                     <div style = {{marginRight: '10px'}}>
