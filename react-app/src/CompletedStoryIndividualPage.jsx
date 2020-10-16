@@ -52,7 +52,7 @@ export default class CompletedStoryIndividualPage extends React.Component {
             console.log(this.state.story.timeEnd - this.state.story.timeStart)
             const dur = this.state.story.timeEnd - this.state.story.timeStart
             return (
-                <div style={{marginLeft: '10px', display: 'flex'}}>
+                <div style={{marginLeft: '10px', display: 'flex', color: 'white'}}>
                     <div style = {{marginRight: '10px'}}>
                         <ThumbUpIcon style = {{color: this.state.chosenVote === 1 ? 'red': 'black'}} onClick={() => this.setVote(1)}/>
                         <ThumbDownIcon style = {{color: this.state.chosenVote === -1 ? 'red': 'black'}} onClick={() => this.setVote(-1)}/>
@@ -63,8 +63,8 @@ export default class CompletedStoryIndividualPage extends React.Component {
                         <em className="lowPriority">Took {Math.floor(dur / 3600000)} hour{(Math.floor(dur / 3600000) == 1) ? "" : "s"} and {Math.floor(dur / 60000) % 60} minute{(Math.floor(dur / 60000) % 60 == 1) ? "" : "s"} to finish</em>
                     </div>
                     <div>
-                        <h2 className="subtitle"style = {{textAlign: 'center'}}>{this.state.story.title}</h2>
-                        <p className="content">{this.state.story.listofwords.join(' ') + '.'}</p>
+                        <h2 style = {{textAlign: 'center', color: 'white'}}>{this.state.story.title}</h2>
+                        <p style = {{color: 'white'}}>{this.state.story.listofwords.join(' ') + '.'}</p>
                     </div>
                 </div>
             )

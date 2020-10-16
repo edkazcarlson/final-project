@@ -46,10 +46,10 @@ export default class Home extends React.Component {
 
     render() {
         return (
-            <div className="App">
+            <div className="App" style={{display: 'flex', flexDirection: "column", justifyContent: 'space-around', alignItems: 'center'}}>
                 <h1 className="title">One Word Story</h1>
                 <br/>
-                <a className="content" href="/contribute">Contribute</a>
+                <a className="subtitle" href="/contribute">Contribute</a>
                 <br/>
                 <button onClick={this.test}>Reset db (for testing purposes)</button>
                 {/* {this.getStories().length === 0 ?
@@ -59,7 +59,7 @@ export default class Home extends React.Component {
           </div>
          )}) } */}
                 <div className="lowPriority">
-                    Icon made by icon king from www.freeicons.io
+                    ICON MADE BY ICONKING FROM WWW.FREEICONS.IO
                 </div>
 
             </div>

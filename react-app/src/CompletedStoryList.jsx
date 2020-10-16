@@ -1,5 +1,20 @@
 import React from 'react'
 import './App.css';
+import Paper from '@material-ui/core/Paper';
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+
+const theme = createMuiTheme({
+    spacing: 8,
+    palette: {
+      type: 'dark',
+      primary: {
+        main: "#7e57c2", //purple
+      },
+      secondary: {
+        main: '#76ff03', //green
+      },
+    },
+  });
 
 export default class CompletedStoryList extends React.Component {
 
@@ -33,17 +48,20 @@ export default class CompletedStoryList extends React.Component {
     }
 
     render() {
-        return(<div>
-               {this.state.demoStories.map((story) =>{
-                   return (<div onClick={() => this.click(story._id)}>
-                            <div style = {{marginLeft: '10px', fontSize: '20px', display: 'flex', width: 'fit-content', cursor: 'pointer'}} >
-                            <b className="lowPriority" style = {{marginRight: '5px'}}>{`${story.votes}:`}</b>
-                            <div className="title" style = {{color: 'blue'}}>{story.title}</div>
-                        </div>
-                        <p className="content" style = {{marginLeft: '5px'}}>{this.getFirstWords(story.listofwords)}</p>
-                       </div>)
-               })}
-            </div>)
+        return (<ThemeProvider theme={theme}>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center"}}>
+            <h1 className="title">Previous Stories</h1>
+            {this.state.demoStories.map((story) => {
+                return (<Paper style={{margin: theme.spacing(1), padding: theme.spacing(2), height: 150, width: 300}} onClick={() => this.click(story._id)}>
+                    <div style={{ cursor: 'pointer' }}>
+                        <div className="subtitle">{story.title}</div>
+                        <div className="lowPriority">{`${story.votes} VOTES`}</div>
+                    </div>
+                    <div className="content">{this.getFirstWords(story.listofwords)}</div>
+                </Paper>)
+            })}
+        </div>
+        </ThemeProvider>)
     }
 
     //assumes that vote objects in the votes array have a value field

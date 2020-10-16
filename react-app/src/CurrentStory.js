@@ -1,13 +1,28 @@
 import axios from 'axios';
 import React from 'react';
-import './App.css';
+import TextField from '@material-ui/core/TextField';
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import * as Y from 'yjs'
-import { WebrtcProvider } from 'y-webrtc'
-import { WebsocketProvider } from 'y-websocket'
+import {WebrtcProvider} from 'y-webrtc'
+import {WebsocketProvider} from 'y-websocket'
 import {IndexeddbPersistence} from 'y-indexeddb'
 
 const ydoc = new Y.Doc()
 let yarray
+let currentUser
+
+const theme = createMuiTheme({
+    spacing: 8,
+    palette: {
+      type: 'dark',
+      primary: {
+        main: "#7e57c2", //purple
+      },
+      secondary: {
+        main: '#76ff03', //green
+      },
+    },
+  });
 
 /*
 TODO:
@@ -15,6 +30,7 @@ TODO:
 */
 // const listOfWords = ydoc.getArray('listofwords')
 export default class CurrentStory extends React.Component {
+
     constructor(props) {
         super(props);
         this.state = {
@@ -24,10 +40,16 @@ export default class CurrentStory extends React.Component {
             id: -1,
             curWordCount: 0,
             isWordType: null,
+            contributors: null
         }
     }
 
     componentDidMount() {
+        fetch("/currentUser").then(function (response) {
+            return response.json()
+        }).then(function (json) {
+            currentUser = json.user
+        })
         axios.get('/getcurstory')
             .then(res => {
                 if (res.data.status === "nostory") {
@@ -52,20 +74,23 @@ export default class CurrentStory extends React.Component {
                         title: res.data.title,
                         id: res.data._id,
                         curWordCount: res.data.listofwords.length,
+                        contributors: res.data.contributors
                     });
                 }
                 //called when yarray is modified
                 yarray.observe(event => {
+                    console.log("CONTRIBUTORS: ", yarray.toArray().map(a => a.user))
                     this.setState({
-                        listOfWords: yarray.toArray(),
-                        curWordCount: yarray.toArray().length
+                        listOfWords: yarray.toArray().map(a => a.word),
+                        curWordCount: yarray.toArray().length,
+                        contributors: yarray.toArray().map(a => a.user)
                     }, function () {
                         if (this.state.maxWords == yarray.length) {
                             alert("Story is complete!");
                             //yarray.delete(0, yarray.length) NOT needed if my theory is correct :D
                             window.open('/', '_self');
                         } else {
-                            console.log(this.state.maxWords, yarray.length);
+                            console.log(yarray.toArray());
                         }
                     });
                 });
@@ -73,38 +98,46 @@ export default class CurrentStory extends React.Component {
     }
 
     addWord(e) {
-        const nextword = document.querySelector('#nextword').value;
         e.preventDefault();
+        const nextword = document.querySelector('#nextword').value;
+        
         if (nextword.split(' ').length > 1 && this.state.isWordType) {
             alert('Cannot upload multiple words for this story');
         } else {
-            axios.post('/addword', {'id': this.state.id, 'word': nextword})
-                .then(response => {
-                    yarray.push([response.data.newword]);
-                    document.querySelector('#nextword').value = '';
-                })
+            yarray.push([{word: nextword, user: currentUser}]);
+            document.querySelector('#nextword').value = '';
+            axios.post('/addword', {
+                'id': this.state.id,
+                'word': nextword,
+                'contributors': yarray.toArray().map(a => a.user)
+            })
+            .then(response => {
+                console.log("Pushed new word to database")
+            })
         }
     }
 
     render() {
         return (
             <div>
-                <h3>{this.state.title}</h3>
-                <div>
+                <h1 className="title">{this.state.title}</h1>
+                <ThemeProvider theme={theme}>
+                <div className="subtitle">
                     {this.state.listOfWords.map(word => (
                         <span>{word} </span>
                     ))}
                     <br/>
                     <form>
-                        <label for="nextword">Next {this.state.isWordType ? "Word" : "Phrase"}: </label><input
-                        id="nextword" name="nextword"/>
-                        <input type="submit" onClick={this.addWord.bind(this)}/>
-
+                        <TextField style={{margin: theme.spacing(1)}} id="nextword" 
+                            label="Next input" type="text" placeholder="enter a word or phrase" 
+                            variant="filled" margin="normal" InputLabelProps={{shrink: true}} 
+                            />
+                        <input style = {{visibility: 'hidden', height: '0px', width: '0px'}}type="submit" onClick={this.addWord.bind(this)}/>
                     </form>
                     <br/>
-                    <h4>There
-                        are {this.state.maxWords - this.state.curWordCount} {this.state.isWordType ? 'words' : 'phrases'} left!</h4>
+                    <h2 className="lowPriority">THERE ARE {this.state.maxWords - this.state.curWordCount} {this.state.isWordType ? 'WORDS' : 'PHRASES'} REMAINING</h2>
                 </div>
+                </ThemeProvider>
             </div>
         );
     }
