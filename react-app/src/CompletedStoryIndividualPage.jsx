@@ -2,6 +2,7 @@ import React from 'react'
 import axios from "axios"
 import {IndexeddbPersistence} from "y-indexeddb";
 import * as Y from "yjs";
+import './App.css';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 
@@ -55,15 +56,15 @@ export default class CompletedStoryIndividualPage extends React.Component {
                     <div style = {{marginRight: '10px'}}>
                         <ThumbUpIcon style = {{color: this.state.chosenVote === 1 ? 'red': 'black'}} onClick={() => this.setVote(1)}/>
                         <ThumbDownIcon style = {{color: this.state.chosenVote === -1 ? 'red': 'black'}} onClick={() => this.setVote(-1)}/>
-                        <p>Points: {this.getVotes(this.state.story.votes)}</p>
-                        <p>Author: {this.state.story.contributors[0]}</p>
-                        <p>Story Type: {this.state.story.storyType}</p>
-                        <em>Finished on {d.toLocaleDateString()} at {d.toLocaleTimeString()} </em> <br/>
-                        <em>Took {Math.floor(dur / 3600000)} hour{(Math.floor(dur / 3600000) == 1) ? "" : "s"} and {Math.floor(dur / 60000) % 60} minute{(Math.floor(dur / 60000) % 60 == 1) ? "" : "s"} to finish</em>
+                        <p className="lowPriority">Points: {this.getVotes(this.state.story.votes)}</p>
+                        <p className="lowPriority">Author: {this.state.story.contributors[0]}</p>
+                        <p className="lowPriority">Story Type: {this.state.story.storyType}</p>
+                        <em className="lowPriority">Finished on {d.toLocaleDateString()} at {d.toLocaleTimeString()} </em> <br/>
+                        <em className="lowPriority">Took {Math.floor(dur / 3600000)} hour{(Math.floor(dur / 3600000) == 1) ? "" : "s"} and {Math.floor(dur / 60000) % 60} minute{(Math.floor(dur / 60000) % 60 == 1) ? "" : "s"} to finish</em>
                     </div>
                     <div>
-                        <h2 style = {{textAlign: 'center'}}>{this.state.story.title}</h2>
-                        <p>{this.state.story.listofwords.join(' ') + '.'}</p>
+                        <h2 className="subtitle"style = {{textAlign: 'center'}}>{this.state.story.title}</h2>
+                        <p className="content">{this.state.story.listofwords.join(' ') + '.'}</p>
                     </div>
                 </div>
             )

@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from "axios"
 import * as Y from 'yjs'
+import './App.css';
 import {IndexeddbPersistence} from 'y-indexeddb'
 
 const ydoc = new Y.Doc()
@@ -38,9 +39,9 @@ export default class CreateStory extends React.Component {
     render() {
         return (
             <div className="App">
-                <h1>Create Story</h1><br/>
+                <h1 className="title">Create Story</h1><br/>
                 <form>
-                    <label for="storylength">Story length </label><input id="storylength" type="number"
+                    <label className="lowPriority" for="storylength">Story length </label><input id="storylength" type="number"
                                                                          name="storylength"
                                                                          className="storyInput"/><br/>
                     <label for="storyfirstword">Story first word </label><input id="storyfirstword"

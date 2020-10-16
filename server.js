@@ -59,8 +59,11 @@ const MongoClient = mongodb.MongoClient;
 const uri = "mongodb+srv://user:aNy7D3J1XbTT2@cluster0.ajcp4.mongodb.net/<dbname>?retryWrites=true&w=majority";
 const client = new MongoClient(uri, {useNewUrlParser: true, useUnifiedTopology: true});
 let stories = null;
+console.log("starting to connect...");
 client.connect(err => {
+    console.log("connected!");
     stories = client.db("data").collection("teststories");
+    stories.find({ }).toArray().then((res) => {console.log(res)})
     // stories.find({ }).toArray().then((res) => {console.log(res)})
 });
 let users = null;

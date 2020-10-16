@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React from 'react';
-
+import './App.css';
 import * as Y from 'yjs'
 import { WebrtcProvider } from 'y-webrtc'
 import { WebsocketProvider } from 'y-websocket'

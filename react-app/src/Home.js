@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React from 'react';
+import './App.css';
 
 /* two ways we can format website (imo):
 1) have everything sorta be on one page
@@ -46,9 +47,9 @@ export default class Home extends React.Component {
     render() {
         return (
             <div className="App">
-                <h1>One Word Story</h1>
+                <h1 className="title">One Word Story</h1>
                 <br/>
-                <a href="/contribute">Contribute</a>
+                <a className="content" href="/contribute">Contribute</a>
                 <br/>
                 <button onClick={this.test}>Reset db (for testing purposes)</button>
                 {/* {this.getStories().length === 0 ?
@@ -57,7 +58,7 @@ export default class Home extends React.Component {
             <b>{story.title}</b> written by {story.op}
           </div>
          )}) } */}
-                <div>
+                <div className="lowPriority">
                     Icon made by icon king from www.freeicons.io
                 </div>
 
