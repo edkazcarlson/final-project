@@ -64,6 +64,7 @@ const theme = createMuiTheme({
     setStoryLength(len){
       this.setState({storyLength: len.target.value})
     }
+
     setfirstWord(e){
       this.setState({firstWord: e.target.value})
     }
