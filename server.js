@@ -181,10 +181,6 @@ app.get('/getfinishedstories', (req, res) => {
     });
 })
 
-app.get('/del', (req, res) => {
-    stories.remove({})
-})
-
 app.get('/getallcompleted', (req, res) => {
     stories.find({finishedStory: true}).toArray(function (err, result) {
         res.json({stories: result});

@@ -24,11 +24,6 @@ const theme = createMuiTheme({
     },
 });
 
-/*
-TODO:
--add feature to limit user to contributing. this is based on the setting when they create a story.
-*/
-// const listOfWords = ydoc.getArray('listofwords')
 export default class CurrentStory extends React.Component {
 
     constructor(props) {
@@ -89,7 +84,6 @@ export default class CurrentStory extends React.Component {
                     }, function () {
                         if (this.state.maxWords == yarray.length) {
                             alert("Story is complete!");
-                            //yarray.delete(0, yarray.length) NOT needed if my theory is correct :D
                             window.open('/', '_self');
                         } else {
                             console.log(yarray.toArray());
