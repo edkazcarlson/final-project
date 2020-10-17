@@ -56,7 +56,7 @@ app.use(cookieSession({
 }))
 const mongodb = require('mongodb');
 const MongoClient = mongodb.MongoClient;
-const uri = "mongodb+srv://user:aNy7D3J1XbTT2@cluster0.ajcp4.mongodb.net/<dbname>?retryWrites=true&w=majority";
+const uri = `mongodb+srv://user:${process.env.DBPASSWORD}@cluster0.ajcp4.mongodb.net/<dbname>?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, {useNewUrlParser: true, useUnifiedTopology: true});
 let stories = null;
 console.log("starting to connect...");
